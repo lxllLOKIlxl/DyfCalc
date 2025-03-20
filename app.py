@@ -22,6 +22,30 @@ st.sidebar.markdown("---")
 st.markdown("### 🧮 Введіть функцію для обчислення:")
 user_function = st.text_input("Введіть функцію тут, наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
+import streamlit as st
+import sympy as sp
+import numpy as np
+import plotly.graph_objs as go
+
+# Заголовок із іконкою
+st.markdown("<h1 style='text-align: center;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
+st.markdown("---")
+
+# Бічне меню
+st.sidebar.markdown("## 🛠️ Оберіть операцію:")
+col1, col2 = st.sidebar.columns([1, 9])  # Розподіл місця для іконок
+with col1:
+    st.markdown("🧮")
+with col2:
+    operation = st.radio("", ["Інтегрування", "Диференціювання"])  # Чітко виділена опція
+
+st.sidebar.markdown("---")
+
+# Введення функції
+st.markdown("### 🧮 Введіть функцію для обчислення:")
+user_function = st.text_input("Введіть функцію тут, наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
+
 if user_function:
     x = sp.symbols('x')
     function = sp.sympify(user_function)
