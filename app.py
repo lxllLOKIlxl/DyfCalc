@@ -19,6 +19,14 @@ with st.sidebar:
     st.header("🎨 Оформлення")
     theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
     st.markdown("---")
+    st.markdown(
+        """
+        <div style="font-size: 10px; text-align: center; color: gray;">
+        Програма ver 1.0 • Запатентовано розробником Sm
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Введення функції з рамкою та тінями
 st.markdown(
