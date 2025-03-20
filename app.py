@@ -3,10 +3,13 @@ import numpy as np
 import streamlit as st
 import sympy as sp
 
-# Заголовок із іконкою та стилем
+# Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
+
+# Оголошення змінної для математичних обчислень
+x = sp.symbols('x')  # ВАЖЛИВО: Оголошення змінної x
 
 # Бокова панель із секціями меню
 with st.sidebar:
@@ -28,7 +31,7 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
-# Побудова графіка функції з точками перетину та анімацією
+# Побудова графіка функції з точками перетину
 if user_function:
     try:
         function = sp.sympify(user_function)
