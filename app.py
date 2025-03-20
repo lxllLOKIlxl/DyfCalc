@@ -62,4 +62,7 @@ if user_function:
                     yaxis_title="f(x)",
                     template="plotly_white"
                 )
-                
+
+                st.plotly_chart(fig)
+    except Exception as e:
+        st.error(f"Помилка в побудові графіка: {e}")
