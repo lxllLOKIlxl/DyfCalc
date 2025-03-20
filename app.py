@@ -20,7 +20,7 @@ with st.sidebar:
     theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
     st.markdown("---")
 
-# Введення функції
+# Введення функції з рамкою та тінями
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -31,17 +31,21 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
-# Побудова графіка функції
+# Побудова графіка функції з перевіркою
 if user_function:
     try:
         # Перетворення функції у SymPy вираз
         function = sp.sympify(user_function)
 
+        # Перевірка ділення на нуль
+        if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
+            raise ZeroDivisionError("Ділення на нуль не допускається!")
+
         # Перевіряємо та видаляємо особливі значення
         x_vals = np.linspace(-10, 10, 500)
         y_vals = sp.lambdify(x, function, 'numpy')(x_vals)
 
-        # Перевірка на невизначені значення
+        # Виключення комплексних чи нескінченних значень
         if not np.isfinite(y_vals).all():
             raise ValueError("Функція має особливі точки або нескінченність!")
 
@@ -75,6 +79,8 @@ if user_function:
 
             st.pyplot(fig)
 
+    except ZeroDivisionError as zde:
+        st.error(f"Ви щось зробили не так: {zde}")
     except ValueError as ve:
         st.error(f"Ви щось зробили не так: {ve}")
     except Exception as e:
@@ -90,6 +96,8 @@ if st.button("🔍 Обчислити"):
         elif operation == "Диференціювання":
             result = sp.diff(function, x)
             st.success(f"Похідна: {result}")
+    except ZeroDivisionError as zde:
+        st.error(f"Ви щось зробили не так: {zde}")
     except Exception as e:
         st.error(f"Сталася помилка обчислення: {e}")
 
