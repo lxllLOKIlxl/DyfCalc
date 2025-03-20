@@ -20,7 +20,7 @@ with st.sidebar:
     theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
     st.markdown("---")
 
-# Введення функції з рамкою та стилем
+# Введення функції
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -31,25 +31,24 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
-# Побудова графіка функції з точками перетину
+# Побудова графіка функції
 if user_function:
     try:
         function = sp.sympify(user_function)
 
-        # Перевіряємо і виключаємо проблемні точки
+        # Перевіряємо "проблемні значення"
         x_vals = np.linspace(-10, 10, 500)
         y_vals = sp.lambdify(x, function, 'numpy')(x_vals)
 
-        valid_mask = np.isfinite(y_vals)
-        x_vals = x_vals[valid_mask]
-        y_vals = y_vals[valid_mask]
+        # Виключення комплексних чи нескінченних значень
+        if not np.isfinite(y_vals).all():
+            raise ValueError("Функція має особливі точки або нескінченність!")
+
+        # Знаходження коренів функції
+        roots = sp.solve(function, x)
+        roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
         if st.checkbox("📊 Показати графік функції"):
-            # Знаходження коренів функції
-            roots = sp.solve(function, x)
-            roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0 and sp.re(root) != sp.oo and sp.re(root) != -sp.oo]
-
-            # Побудова графіка
             fig, ax = plt.subplots()
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
 
@@ -66,19 +65,21 @@ if user_function:
                     bbox=dict(boxstyle="round,pad=0.3", edgecolor="blue", facecolor="lightyellow")
                 )
 
-            ax.set_title("Графік функції з точками перетину", fontsize=14, color="black")
-            ax.set_xlabel("Вісь X", fontsize=12)
-            ax.set_ylabel("Вісь Y", fontsize=12)
+            ax.set_title("Графік функції", fontsize=14)
+            ax.set_xlabel("x", fontsize=12)
+            ax.set_ylabel("f(x)", fontsize=12)
             ax.legend(loc="best")
-            ax.grid(True, linestyle="--", alpha=0.7)
+            ax.grid(True)
 
             st.pyplot(fig)
 
+    except ValueError as ve:
+        st.error(f"Ви щось зробили не так: {ve}")
     except Exception as e:
-        st.error(f"Помилка побудови графіка: {e}")
+        st.error(f"Сталася помилка: {e}")
 
-# Кнопка для обчислень
-if user_function and st.button("🔍 Обчислити"):
+# Кнопка для обчислення
+if st.button("🔍 Обчислити"):
     try:
         if operation == "Інтегрування":
             result = sp.integrate(function, x)
@@ -86,10 +87,8 @@ if user_function and st.button("🔍 Обчислити"):
         elif operation == "Диференціювання":
             result = sp.diff(function, x)
             st.success(f"Похідна: {result}")
-        else:
-            st.error("Некоректна операція.")
     except Exception as e:
-        st.error(f"Помилка обчислення: {e}")
+        st.error(f"Сталася помилка обчислення: {e}")
 
 # Фонова стилізація
 st.markdown(
