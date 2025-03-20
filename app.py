@@ -3,39 +3,42 @@ import sympy as sp
 import numpy as np
 import plotly.graph_objs as go
 
-# Дизайн заголовка
-st.markdown("<h1 style='text-align: center; color: blue;'>DyfCalc</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій з Анімацією</h3>", unsafe_allow_html=True)
+# Заголовок із іконкою
+st.markdown("<h1 style='text-align: center;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Змінна для математичних обчислень
-x = sp.symbols('x')
-
-# Вибір операції
-operation = st.sidebar.selectbox("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+# Бічне меню із іконками
+st.sidebar.markdown("## 🛠️ Опції:")
+st.sidebar.markdown("- 🧮 Інтегрування")
+st.sidebar.markdown("- 📈 Побудова графіків")
+st.sidebar.markdown("- ✂️ Диференціювання")
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🎨 Теми:")
+theme = st.sidebar.radio("Оберіть тему:", ["Світла", "Темна"])
 
 # Введення функції
-st.markdown("### 🧮 Введіть функцію:")
+st.markdown("### 🧮 Введіть функцію для обчислення:")
 user_function = st.text_input("Наприклад, x**2 - 4*x + 3")
 
+# Динамічний графік
+x = sp.symbols('x')
 if user_function:
     function = sp.sympify(user_function)
 
-    # Показати динамічний графік
-    if st.checkbox("Показати анімований графік"):
+    # Побудова графіка
+    if st.checkbox("📊 Показати графік функції"):
         func_np = sp.lambdify(x, function, "numpy")
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
-        # Створення точок перетину
+        # Точки перетину
         roots = sp.solve(function, x)
         roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
-        # Графік функції
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=x_vals, y=y_vals, mode='lines', name=f"f(x) = {user_function}"))
 
-        # Анімація точок перетину
         for root in roots_np:
             fig.add_trace(go.Scatter(x=[root], y=[func_np(root)], mode='markers+text',
                                      marker=dict(size=10, color='red'),
@@ -44,16 +47,16 @@ if user_function:
                                      name="Точка перетину"))
 
         fig.update_layout(
-            title="Анімований графік з точками перетину",
+            title="Графік функції з точками перетину",
             xaxis_title="x",
             yaxis_title="f(x)",
-            showlegend=True,
-            template="plotly_white"
+            template="plotly_dark" if theme == "Темна" else "plotly_white"
         )
 
         st.plotly_chart(fig)
 
-    # Обчислення обраної операції
+    # Виконання операції
+    operation = st.selectbox("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
     if st.button("🔍 Обчислити"):
         if operation == "Інтегрування":
             result = sp.integrate(function, x)
