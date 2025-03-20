@@ -8,20 +8,19 @@ st.markdown("<h1 style='text-align: center;'>🔢 DyfCalc</h1>", unsafe_allow_ht
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Бічне меню із вибором операцій
+# Бічне меню із вибором операцій та тем
 st.sidebar.markdown("## 🛠️ Оберіть операцію:")
-operation = st.sidebar.radio(
-    "Оберіть дію:",
-    ["Інтегрування", "Диференціювання"]
-)
+operation = st.sidebar.radio("", ["Інтегрування", "Диференціювання"])
+
+st.sidebar.markdown("### 🎨 Теми:")
+theme = st.sidebar.radio("Оберіть тему:", ["Світла", "Темна"])
 
 st.sidebar.markdown("---")
 
 # Введення функції
 st.markdown("### 🧮 Введіть функцію для обчислення:")
-user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
+user_function = st.text_input("Введіть функцію тут, наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
-# Якщо користувач ввів функцію
 if user_function:
     try:
         x = sp.symbols('x')
@@ -36,7 +35,7 @@ if user_function:
                 result = sp.diff(function, x)
                 st.success(f"Похідна: {result}")
 
-            # Показати кнопку графіка лише після обчислення
+            # Кнопка для побудови графіка
             if st.button("📊 Показати графік"):
                 func_np = sp.lambdify(x, function, "numpy")
                 x_vals = np.linspace(-10, 10, 500)
@@ -56,14 +55,14 @@ if user_function:
                                              textposition="top center",
                                              name="Точка перетину"))
 
+                # Використання теми для графіка
                 fig.update_layout(
                     title="Графік функції з точками перетину",
                     xaxis_title="x",
                     yaxis_title="f(x)",
-                    template="plotly_white"
+                    template="plotly_dark" if theme == "Темна" else "plotly_white"
                 )
 
                 st.plotly_chart(fig)
-
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
