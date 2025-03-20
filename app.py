@@ -31,10 +31,10 @@ if user_function:
         if st.button("🔍 Обчислити"):
             if "Інтегрування" in operation:
                 result = sp.integrate(function, x)
-                st.success(f"Інтеграл: {result}")
+                st.success(f"Інтеграл обчислено: {result}")
             elif "Диференціювання" in operation:
                 result = sp.diff(function, x)
-                st.success(f"Похідна: {result}")
+                st.success(f"Похідну обчислено: {result}")
 
             # Кнопка для побудови графіка
             if st.button("📊 Показати графік"):
@@ -62,7 +62,4 @@ if user_function:
                     yaxis_title="f(x)",
                     template="plotly_white"
                 )
-
-                st.plotly_chart(fig)
-    except Exception as e:
-        st.error(f"Помилка в обчисленнях чи побудові графіка: {e}")
+                
