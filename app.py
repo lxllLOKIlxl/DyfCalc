@@ -7,25 +7,27 @@ from firebase_admin import credentials, db
 import os
 import json
 
-# Ініціалізація Firebase через секрети Streamlit
+# Створення локального файлу для Firebase ключа
 firebase_key_raw = os.getenv("FIREBASE_KEY")
 if not firebase_key_raw:
     st.error("FIREBASE_KEY не знайдено у секретах Streamlit Cloud!")
 else:
-    st.write("FIREBASE_KEY успішно завантажено!")
+    try:
+        firebase_key = json.loads(firebase_key_raw)
+        with open("serviceAccountKey.json", "w") as f:
+            json.dump(firebase_key, f)
+        st.write("Ключ Firebase збережено у файл!")
+    except json.JSONDecodeError as e:
+        st.error(f"Помилка JSONDecodeError: {e}")
 
-try:
-    firebase_key = json.loads(firebase_key_raw)
-except json.JSONDecodeError as e:
-    st.error(f"Помилка JSONDecodeError: {e}")
-
+# Ініціалізація Firebase із локального файлу
 if not firebase_admin._apps:
     try:
-        cred = credentials.Certificate(firebase_key)
+        cred = credentials.Certificate("serviceAccountKey.json")  # Локальний файл
         firebase_admin.initialize_app(cred, {
             'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
         })
-        st.write("Firebase успішно ініціалізовано!")
+        st.write("Firebase успішно ініціалізовано через локальний файл!")
     except ValueError as e:
         st.error(f"Помилка ініціалізації Firebase: {e}")
 
@@ -160,6 +162,11 @@ if st.button("🔍 Обчислити"):
             st.success(f"Похідна: {result}")
     except Exception as e:
         st.error(f"Сталася помилка обчислення: {e}")
+
+# Видалення тимчасового файлу
+if os.path.exists("serviceAccountKey.json"):
+    os.remove("serviceAccountKey.json")
+    st.write("Тимчасовий файл із ключем успішно видалено.")
 
 # Додатковий стиль
 st.markdown(
