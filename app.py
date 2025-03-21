@@ -31,7 +31,9 @@ with st.sidebar:
 
     # Поле для введення повідомлення
     user_input = st.text_input("Ваше повідомлення:", value="", key="user_message")
-    if st.button("Відправити", key="send_button"):
+    send_button_clicked = st.button("Відправити", key="send_button")
+
+    if send_button_clicked:
         if user_input.strip():  # Перевіряємо, чи поле не порожнє
             # Зберігаємо повідомлення в локальну пам'ять
             st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
