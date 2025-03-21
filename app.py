@@ -30,13 +30,11 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:", key="user_message")
+    user_input = st.text_input("Ваше повідомлення:", value="", key="user_message")
     if st.button("Відправити"):
         if user_input.strip():  # Перевіряємо, чи поле не порожнє
             # Додаємо повідомлення до історії
             st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
-            # Очищення поля відбувається через його заміну
-            st.session_state['user_message'] = ""
 
     st.markdown("---")
     st.header("🔧 Налаштування")
