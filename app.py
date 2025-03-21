@@ -34,8 +34,12 @@ with st.sidebar:
     for msg in st.session_state['chat_history']:
         st.write(msg)
 
+    # Ініціалізація user_message, якщо його ще немає
+    if 'user_message' not in st.session_state:
+        st.session_state['user_message'] = ""
+
     # Поле для введення повідомлення
-    st.text_input("Ваше повідомлення:", value="", key="user_message")
+    st.text_input("Ваше повідомлення:", value=st.session_state['user_message'], key="user_message")
     st.button("Відправити", key="send_button", on_click=send_message)
 
     st.markdown("---")
