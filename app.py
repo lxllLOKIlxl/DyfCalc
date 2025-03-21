@@ -5,7 +5,7 @@ import sympy as sp
 
 # Лічильник кількості користувачів онлайн (локальний підрахунок у сесії)
 if 'user_count' not in st.session_state:
-    st.session_state['user_count'] = 1  # Ініціалізація
+    st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
 # Історія повідомлень у чаті
@@ -37,6 +37,7 @@ with st.sidebar:
     if st.button("Відправити", key="send"):
         if user_input.strip():  # Перевірка непорожнього повідомлення
             st.session_state['chat_history'].append(f"Користувач: {user_input}")
+            user_input = ""  # Очищення поля після відправлення
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -147,7 +148,7 @@ st.markdown(
         background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
     }
     .stButton>button {
-        background-color: #4CAF50;
+        background-color: #007BFF; /* Синій колір кнопки */
         color: white;        
         border: none;
         padding: 6px 12px; /* Розмір кнопки */
@@ -160,7 +161,7 @@ st.markdown(
         transition-duration: 0.4s;
     }
     .stButton>button:hover {
-        background-color: #007BFF; /* Синій колір при наведенні */
+        background-color: #0056b3; /* Темніше синій при наведенні */
         color: white;
     }
     </style>
