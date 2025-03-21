@@ -8,15 +8,26 @@ import os
 import json
 
 # Ініціалізація Firebase через секрети Streamlit
-firebase_key_raw = os.getenv("FIREBASE_KEY")  # Отримуємо секрет
+firebase_key_raw = os.getenv("FIREBASE_KEY")
 if not firebase_key_raw:
-    st.error("FIREBASE_KEY не знайдено! Перевірте секрети Streamlit Cloud.")
-firebase_key = json.loads(firebase_key_raw)  # Завантажуємо JSON
+    st.error("FIREBASE_KEY не знайдено у секретах Streamlit Cloud!")
+else:
+    st.write("FIREBASE_KEY успішно завантажено!")
+
+try:
+    firebase_key = json.loads(firebase_key_raw)
+except json.JSONDecodeError as e:
+    st.error(f"Помилка JSONDecodeError: {e}")
+
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebase_key)
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'  # URL вашої бази
-    })
+    try:
+        cred = credentials.Certificate(firebase_key)
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
+        })
+        st.write("Firebase успішно ініціалізовано!")
+    except ValueError as e:
+        st.error(f"Помилка ініціалізації Firebase: {e}")
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
