@@ -17,9 +17,6 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Оголошення змінних
-x, y, z = sp.symbols('x y z')  # Додані змінні y і z
-
 # Бокова панель із параметрами
 with st.sidebar:
     # Лічильник користувачів
@@ -33,11 +30,11 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:", key="chat_input")
-    if st.button("Відправити", key="send"):
+    user_input = st.text_input("Ваше повідомлення:")
+    if st.button("Відправити"):
         if user_input.strip():  # Перевірка на порожнє значення
             st.session_state['chat_history'].append(f"Користувач: {user_input}")
-            st.session_state['chat_input'] = ""  # Очищення поля після відправлення
+            user_input = ""  # Очистимо локальну змінну для вводу
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -54,7 +51,7 @@ with st.sidebar:
         """, unsafe_allow_html=True
     )
 
-# Введення функції
+# Основна функціональність
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -65,82 +62,40 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
 
-# Побудова графіка функції з перевіркою
+# Побудова графіка функції
 if user_function:
     try:
-        # Перетворення функції у SymPy вираз
+        x, y, z = sp.symbols('x y z')
         function = sp.sympify(user_function)
 
         # Перевірка ділення на нуль
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
-        # Підстановка значень для змінних y і z, якщо вони є у функції
-        substitutions = {var: 1 for var in [y, z] if var in function.free_symbols}  # Підставляємо 1 тільки для змінних, які присутні
-        function = function.subs(substitutions)  # Застосування підстановок
+        # Підстановка значень для змінних y і z
+        substitutions = {var: 1 for var in [y, z] if var in function.free_symbols}
+        function = function.subs(substitutions)
 
-        # Генеруємо числову версію функції
+        # Генерування числових даних
         func_np = sp.lambdify(x, function, 'numpy')
-
-        # Генеруємо числові значення для графіка
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
-        # Перевірка лише числових значень
-        if not np.isfinite(y_vals).all():
-            raise ValueError("Функція має особливі точки або нескінченність!")
-
-        # Знаходження коренів функції
-        roots = sp.solve(function, x)
-        roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
-
+        # Побудова графіка
         if st.checkbox("📊 Показати графік функції"):
-            # Побудова графіка
             fig, ax = plt.subplots()
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
-
-            # Додавання точок перетину
-            for root in roots_np:
-                ax.scatter(root, 0, color="red", label=f"Точка перетину: {root:.2f}")
-                ax.annotate(
-                    f"{root:.2f}",
-                    (root, 0),
-                    textcoords="offset points",
-                    xytext=(0, 10),
-                    ha="center",
-                    fontsize=10,
-                    bbox=dict(boxstyle="round,pad=0.3", edgecolor="blue", facecolor="lightyellow")
-                )
-
-            ax.set_title("Графік функції", fontsize=14)
-            ax.set_xlabel("x", fontsize=12)
-            ax.set_ylabel("f(x)", fontsize=12)
-            ax.legend(loc="best")
+            ax.set_title("Графік функції")
+            ax.legend()
             ax.grid(True)
-
             st.pyplot(fig)
 
     except ZeroDivisionError as zde:
         st.error(f"Ви щось зробили не так: {zde}")
-    except ValueError as ve:
-        st.error(f"Ви щось зробили не так: {ve}")
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
 
-# Кнопка для обчислення
-if st.button("🔍 Обчислити"):
-    try:
-        # Інтегрування або диференціювання
-        if operation == "Інтегрування":
-            result = sp.integrate(function, x)
-            st.success(f"Інтеграл: {result}")
-        elif operation == "Диференціювання":
-            result = sp.diff(function, x)
-            st.success(f"Похідна: {result}")
-    except Exception as e:
-        st.error(f"Сталася помилка обчислення: {e}")
-
-# Фонова стилізація
+# Стилізація
 st.markdown(
     """
     <style>
