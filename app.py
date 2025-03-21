@@ -28,7 +28,7 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-# Введення функції
+# Введення функції з рамкою та стилем
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -49,14 +49,13 @@ if user_function:
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
-        # Підстановка значень для змінних y і z (якщо введені користувачем)
-        st.markdown("### 🔄 Введіть значення змінних (за потреби):")
+        # Підстановка значень для змінних y і z
+        st.markdown("### 🔄 Введіть значення змінних (необов'язково):")
         substitutions = {}
         for var in [y, z]:  # Для y і z
-            value = st.text_input(f"Введіть значення для {var} (залиште порожнім, якщо не потрібно):", value="")
-            if value:  # Використовуємо значення, тільки якщо воно введене
-                substitutions[var] = float(value)
-        function = function.subs(substitutions)  # Підстановка введених значень
+            value = st.text_input(f"Введіть значення для {var} (за замовчуванням 1):", value="1")
+            substitutions[var] = float(value) if value else 1  # Використовуємо значення 1, якщо поле порожнє
+        function = function.subs(substitutions)  # Підстановка значень
 
         # Генеруємо числову версію функції
         func_np = sp.lambdify(x, function, 'numpy')
@@ -76,7 +75,7 @@ if user_function:
         if st.checkbox("📊 Показати графік функції"):
             # Побудова графіка
             fig, ax = plt.subplots()
-            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
+            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function} (y = {substitutions[y]}, z = {substitutions[z]})", color="blue")
 
             # Додавання точок перетину
             for root in roots_np:
@@ -131,9 +130,9 @@ st.markdown(
     .stButton>button {
         background-color: #4CAF50;
         color: white;
-        border: none;        
+        border: none;
         padding: 10px 24px;
-        text-align: center;
+        text-align: center;        
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
