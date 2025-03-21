@@ -8,21 +8,27 @@ import firebase_admin
 from firebase_admin import credentials, db
 import time  # Для автоматичного оновлення
 
-# Ініціалізація Firebase через Streamlit Secrets
-firebase_key_raw = os.getenv("FIREBASE_KEY")  # Завантаження секрету з Streamlit Secrets
-if firebase_key_raw:
-    firebase_key = json.loads(firebase_key_raw)
-    if not firebase_admin._apps:
-        try:
-            cred = credentials.Certificate(firebase_key)
-            firebase_admin.initialize_app(cred, {
-                'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
-            })
-            st.write("Firebase успішно ініціалізовано!")
-        except ValueError as e:
-            st.error(f"Помилка ініціалізації Firebase: {e}")
-else:
-    st.error("FIREBASE_KEY не знайдено у секретах Streamlit!")
+# Ваша конфігурація Firebase (адаптована для Python SDK)
+firebaseConfig = {
+    "type": "service_account",
+    "project_id": "dyfcalc-chat",
+    "private_key_id": "<your_private_key_id>",
+    "private_key": "<your_private_key>",  # Замініть усі "\n" на "\\n"
+    "client_email": "firebase-adminsdk-fbsvc@dyfcalc-chat.iam.gserviceaccount.com",
+    "client_id": "104844286550364727471",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc@dyfcalc-chat.iam.gserviceaccount.com",
+    "databaseURL": "https://dyfcalc-chat-default-rtdb.firebaseio.com"
+}
+
+# Ініціалізація Firebase
+if not firebase_admin._apps:
+    cred = credentials.Certificate(firebaseConfig)
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': firebaseConfig["databaseURL"]
+    })
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
