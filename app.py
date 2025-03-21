@@ -1,45 +1,22 @@
-import os
-import json
-import firebase_admin
-from firebase_admin import credentials
-
-# Завантаження ключа з Streamlit Secrets
-firebase_key_raw = os.getenv("FIREBASE_KEY")
-if firebase_key_raw:
-    firebase_key = json.loads(firebase_key_raw)
-    if not firebase_admin._apps:
-        cred = credentials.Certificate(firebase_key)
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
-        })
-        st.write("Firebase успішно ініціалізовано!")
-else:
-    st.error("FIREBASE_KEY не знайдено у секретах Streamlit!")
+import matplotlib.pyplot as plt
+import numpy as np
+import streamlit as st
+import sympy as sp
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Функції для роботи з Firebase
-def save_message(user, message):
-    ref = db.reference('messages')  # Посилання на базу даних
-    ref.push({'user': user, 'message': message})
-
-def fetch_messages():
-    ref = db.reference('messages')  # Отримання повідомлень із бази даних
-    return ref.get() or {}  # Повертаємо всі повідомлення
-
-# Історія чату
+# Історія чату (локальна пам'ять або файл)
 if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = fetch_messages()
+    st.session_state['chat_history'] = []
 
-# Функція для відправлення повідомлення
+# Функція для відправки повідомлення
 def send_message():
     if "user_message" in st.session_state and st.session_state["user_message"].strip():
-        save_message("Користувач", st.session_state["user_message"].strip())
-        st.session_state["chat_history"] = fetch_messages()  # Оновлення історії
-        st.session_state["user_message"] = ""  # Очищення поля введення
+        st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
+        st.session_state["user_message"] = ""
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -55,9 +32,8 @@ with st.sidebar:
 
     # Чат
     st.header("💬 Онлайн-чат")
-    messages = st.session_state['chat_history']
-    for msg_id, msg_data in messages.items():
-        st.write(f"{msg_data['user']}: {msg_data['message']}")
+    for msg in st.session_state['chat_history']:
+        st.write(msg)
 
     # Поле для введення повідомлення
     st.text_input("Ваше повідомлення:", value="", key="user_message")
