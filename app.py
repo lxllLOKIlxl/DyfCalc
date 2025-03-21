@@ -49,11 +49,14 @@ if user_function:
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
-        # Перевіряємо та видаляємо особливі значення
-        x_vals = np.linspace(-10, 10, 500)
-        y_vals = sp.lambdify(x, function, 'numpy')(x_vals)
+        # Генеруємо числову версію функції
+        func_np = sp.lambdify(x, function, 'numpy')
 
-        # Виключення комплексних чи нескінченних значень
+        # Генеруємо числові значення x та y
+        x_vals = np.linspace(-10, 10, 500)
+        y_vals = func_np(x_vals)
+
+        # Перевірка лише числових значень
         if not np.isfinite(y_vals).all():
             raise ValueError("Функція має особливі точки або нескінченність!")
 
