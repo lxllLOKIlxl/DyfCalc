@@ -178,4 +178,7 @@ st.markdown(
         color: black;
         border: 2px solid #4CAF50;
     }
-    </style
+    </style>
+    """,
+    unsafe_allow_html=True
+)
