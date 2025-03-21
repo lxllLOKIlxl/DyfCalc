@@ -33,22 +33,24 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Напишіть повідомлення:")
-    col1, col2, col3 = st.columns(3)
+    user_input = st.text_input("Напишіть повідомлення:", key="chat_input")
+
+    # Кнопки для смайликів
+    col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
     with col1:
-        if st.button("😊"):
+        if st.button("😊", key="smile"):
             user_input += " 😊"
     with col2:
-        if st.button("😍"):
+        if st.button("😍", key="love"):
             user_input += " 😍"
     with col3:
-        if st.button("😅"):
+        if st.button("😅", key="laugh"):
             user_input += " 😅"
-
-    # Додавання повідомлення до історії
-    if user_input:
-        st.session_state['chat_history'].append(f"Користувач: {user_input}")
-        user_input = ""  # Очистити поле після відправки
+    with col4:
+        if st.button("Відправити"):
+            if user_input.strip():  # Якщо повідомлення не порожнє
+                st.session_state['chat_history'].append(f"Користувач: {user_input}")
+                st.experimental_rerun()  # Оновлюємо сторінку для відображення нового повідомлення
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -176,7 +178,4 @@ st.markdown(
         color: black;
         border: 2px solid #4CAF50;
     }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    </style
