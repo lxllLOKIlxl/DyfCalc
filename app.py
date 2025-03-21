@@ -12,30 +12,49 @@ st.session_state['user_count'] += 1
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
-# Поле для введення чату
-st.sidebar.header("💬 Онлайн-чат")
-user_input = st.sidebar.text_input("Ваше повідомлення:", key="chat_input")
-if st.sidebar.button("Відправити"):
-    if user_input.strip():  # Перевірка на непорожнє значення
-        # Додаємо повідомлення до історії чату
-        st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
-        # Очищуємо введення (через локальну змінну)
-        st.experimental_rerun()  # Оновлення інтерфейсу для миттєвого очищення поля
-
-# Відображення історії чату
-for msg in st.session_state['chat_history']:
-    st.sidebar.write(msg)
-
-st.sidebar.markdown("---")
-st.sidebar.header("🔧 Налаштування")
-operation = st.sidebar.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
-st.sidebar.markdown("---")
-theme = st.sidebar.radio("Оберіть тему:", ["Світла", "Темна"])
+# Ініціалізуємо поле для введення, якщо його ще немає
+if 'chat_input' not in st.session_state:
+    st.session_state['chat_input'] = ""
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
+
+# Бокова панель із параметрами
+with st.sidebar:
+    # Лічильник користувачів
+    st.header("👥 Користувачі")
+    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.markdown("---")
+
+    # Чат
+    st.header("💬 Онлайн-чат")
+    for msg in st.session_state['chat_history']:
+        st.write(msg)
+
+    # Поле для введення повідомлення
+    user_input = st.text_input("Ваше повідомлення:", key="chat_input")
+    if st.button("Відправити"):
+        if user_input.strip():  # Перевіряємо, чи поле не порожнє
+            # Додаємо повідомлення до історії
+            st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
+            st.session_state['chat_input'] = ""  # Скидаємо поле введення
+
+    st.markdown("---")
+    st.header("🔧 Налаштування")
+    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+    st.markdown("---")
+    st.header("🎨 Оформлення")
+    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+    st.markdown("---")
+    st.markdown(
+        """
+        <div style="text-align: center; color: gray;">
+        Програма ver 1.0 • Запатентовано розробником Sm
+        </div>
+        """, unsafe_allow_html=True
+    )
 
 # Введення функції
 st.markdown(
