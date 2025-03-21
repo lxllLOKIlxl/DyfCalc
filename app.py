@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import sympy as sp
 
-# Лічильник кількості користувачів онлайн (локальний підрахунок у сесії)
+# Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
@@ -11,10 +11,6 @@ st.session_state['user_count'] += 1
 # Історія повідомлень у чаті
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
-
-# Ініціалізуємо поле для введення, якщо його ще немає
-if 'chat_input' not in st.session_state:
-    st.session_state['chat_input'] = ""
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -34,12 +30,13 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:", key="chat_input")
+    user_input = st.text_input("Ваше повідомлення:", key="user_message")
     if st.button("Відправити"):
         if user_input.strip():  # Перевіряємо, чи поле не порожнє
             # Додаємо повідомлення до історії
             st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
-            st.session_state['chat_input'] = ""  # Скидаємо поле введення
+            # Очищення поля відбувається через його заміну
+            st.session_state['user_message'] = ""
 
     st.markdown("---")
     st.header("🔧 Налаштування")
