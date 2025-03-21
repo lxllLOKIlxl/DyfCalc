@@ -8,7 +8,7 @@ if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія чату (локальна пам'ять або файл)
+# Історія чату (локальна пам'ять)
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
@@ -31,10 +31,11 @@ with st.sidebar:
 
     # Поле для введення повідомлення
     user_input = st.text_input("Ваше повідомлення:", value="", key="user_message")
-    if st.button("Відправити"):
+    if st.button("Відправити", key="send_button"):
         if user_input.strip():  # Перевіряємо, чи поле не порожнє
             # Зберігаємо повідомлення в локальну пам'ять
             st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
+            st.session_state["user_message"] = ""  # Очищаємо поле введення
 
     st.markdown("---")
     st.header("🔧 Налаштування")
