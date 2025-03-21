@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import sympy as sp
 
-# Лічильник кількості користувачів онлайн
+# Лічильник кількості користувачів онлайн (локальний підрахунок у сесії)
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
@@ -11,6 +11,10 @@ st.session_state['user_count'] += 1
 # Історія повідомлень у чаті
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
+
+# Тимчасове поле для введення
+if 'temp_input' not in st.session_state:
+    st.session_state['temp_input'] = ""  # Ініціалізація тимчасового поля
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -30,11 +34,11 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:")
+    user_input = st.text_input("Ваше повідомлення:", value=st.session_state['temp_input'], key="chat_input")
     if st.button("Відправити"):
-        if user_input.strip():  # Перевірка на порожнє значення
-            st.session_state['chat_history'].append(f"Користувач: {user_input}")
-            st.session_state['input_updated'] = True  # Додаємо стан "оновлення"
+        if user_input.strip():  # Перевірка, чи поле не порожнє
+            st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
+            st.session_state['temp_input'] = ""  # Очищення тимчасового поля
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -51,7 +55,7 @@ with st.sidebar:
         """, unsafe_allow_html=True
     )
 
-# Основна функціональність
+# Введення функції
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
