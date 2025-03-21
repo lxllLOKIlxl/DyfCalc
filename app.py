@@ -8,10 +8,10 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Оголошення змінних
-x, y, z = sp.symbols('x y z')  # Додані змінні y і z
+# Оголошення змінної
+x = sp.symbols('x')
 
-# Бокова панель із параметрами
+# Бокова панель із секціями меню
 with st.sidebar:
     st.header("🔧 Налаштування")
     operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
@@ -28,7 +28,7 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-# Введення функції з рамкою та стилем
+# Введення функції з рамкою та тінями
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -37,7 +37,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
+user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
 
 # Побудова графіка функції з перевіркою
 if user_function:
@@ -49,18 +49,10 @@ if user_function:
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
-        # Підстановка значень для змінних y і z
-        st.markdown("### 🔄 Введіть значення змінних (необов'язково):")
-        substitutions = {}
-        for var in [y, z]:  # Для y і z
-            value = st.text_input(f"Введіть значення для {var} (за замовчуванням 1):", value="1")
-            substitutions[var] = float(value) if value else 1  # Використовуємо значення 1, якщо поле порожнє
-        function = function.subs(substitutions)  # Підстановка значень
-
         # Генеруємо числову версію функції
         func_np = sp.lambdify(x, function, 'numpy')
 
-        # Генеруємо числові значення для графіка
+        # Генеруємо числові значення x та y
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
@@ -75,7 +67,7 @@ if user_function:
         if st.checkbox("📊 Показати графік функції"):
             # Побудова графіка
             fig, ax = plt.subplots()
-            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function} (y = {substitutions[y]}, z = {substitutions[z]})", color="blue")
+            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
 
             # Додавання точок перетину
             for root in roots_np:
@@ -132,7 +124,7 @@ st.markdown(
         color: white;
         border: none;
         padding: 10px 24px;
-        text-align: center;        
+        text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
