@@ -8,8 +8,8 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Оголошення змінної
-x = sp.symbols('x')
+# Оголошення змінних
+x, y, z = sp.symbols('x y z')  # Додано змінні y та z
 
 # Бокова панель із секціями меню
 with st.sidebar:
@@ -37,7 +37,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-user_function = st.text_input("Наприклад, x**2 - 4*x + 3", placeholder="x**2 - 4*x + 3")
+user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
 
 # Побудова графіка функції з перевіркою
 if user_function:
@@ -48,6 +48,13 @@ if user_function:
         # Перевірка ділення на нуль
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
+
+        # Підстановка значень для змінних y і z
+        st.markdown("### 🔄 Введіть значення змінних:")
+        substitutions = {}
+        for var in [y, z]:  # Для y і z
+            substitutions[var] = float(st.text_input(f"Введіть значення для {var}:", value="1"))
+        function = function.subs(substitutions)  # Підстановка значень
 
         # Генеруємо числову версію функції
         func_np = sp.lambdify(x, function, 'numpy')
@@ -67,7 +74,7 @@ if user_function:
         if st.checkbox("📊 Показати графік функції"):
             # Побудова графіка
             fig, ax = plt.subplots()
-            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
+            ax.plot(x_vals, y_vals, label=f"f(x) = {user_function} (y = {substitutions[y]}, z = {substitutions[z]})", color="blue")
 
             # Додавання точок перетину
             for root in roots_np:
@@ -124,7 +131,7 @@ st.markdown(
         color: white;
         border: none;
         padding: 10px 24px;
-        text-align: center;
+        text-align: center;        
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
