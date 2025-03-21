@@ -28,15 +28,25 @@ if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
+# Функції для роботи з Firebase
+def save_message(user, message):
+    ref = db.reference('messages')  # Посилання на базу даних
+    ref.push({'user': user, 'message': message})
+
+def fetch_messages():
+    ref = db.reference('messages')  # Отримання повідомлень із бази даних
+    return ref.get() or {}  # Повернення повідомлень, якщо вони існують
+
 # Історія чату
 if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
+    st.session_state['chat_history'] = fetch_messages()
 
 # Функція для відправлення повідомлення
 def send_message():
     if "user_message" in st.session_state and st.session_state["user_message"].strip():
-        st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
-        st.session_state["user_message"] = ""
+        save_message("Користувач", st.session_state["user_message"].strip())
+        st.session_state["chat_history"] = fetch_messages()  # Оновлення історії
+        st.session_state["user_message"] = ""  # Очищення поля введення
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -52,8 +62,9 @@ with st.sidebar:
 
     # Чат
     st.header("💬 Онлайн-чат")
-    for msg in st.session_state['chat_history']:
-        st.write(msg)
+    messages = st.session_state['chat_history']
+    for msg_id, msg_data in messages.items():
+        st.write(f"{msg_data['user']}: {msg_data['message']}")
 
     # Поле для введення повідомлення
     st.text_input("Ваше повідомлення:", value="", key="user_message")
