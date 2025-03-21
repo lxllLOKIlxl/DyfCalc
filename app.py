@@ -2,48 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
-import firebase_admin
-from firebase_admin import credentials, db
-import os
-import json
-
-# Створення локального файлу для Firebase ключа
-firebase_key_raw = os.getenv("FIREBASE_KEY")
-if not firebase_key_raw:
-    st.error("FIREBASE_KEY не знайдено у секретах Streamlit Cloud!")
-else:
-    try:
-        firebase_key = json.loads(firebase_key_raw)
-        with open("serviceAccountKey.json", "w") as f:
-            json.dump(firebase_key, f)
-        st.write("Ключ Firebase збережено у файл!")
-    except json.JSONDecodeError as e:
-        st.error(f"Помилка JSONDecodeError: {e}")
-
-# Ініціалізація Firebase із локального файлу
-if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate("serviceAccountKey.json")  # Локальний файл
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
-        })
-        st.write("Firebase успішно ініціалізовано через локальний файл!")
-    except ValueError as e:
-        st.error(f"Помилка ініціалізації Firebase: {e}")
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Чат-функції
-def save_message_to_db(user, message):
-    ref = db.reference('messages')
-    ref.push({'user': user, 'message': message})
-
-def fetch_messages():
-    ref = db.reference('messages')
-    return ref.get()
+# Історія чату (локальна пам'ять або файл)
+if 'chat_history' not in st.session_state:
+    st.session_state['chat_history'] = []
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -59,16 +26,15 @@ with st.sidebar:
 
     # Чат
     st.header("💬 Онлайн-чат")
-    user_input = st.text_input("Ваше повідомлення:", key="user_message")
-    if st.button("Відправити"):
-        if user_input.strip():
-            save_message_to_db("Користувач", user_input.strip())  # Збереження у Firebase
+    for msg in st.session_state['chat_history']:
+        st.write(msg)
 
-    # Отримання повідомлень із Firebase
-    messages = fetch_messages()
-    if messages:
-        for msg_id, msg_data in messages.items():
-            st.write(f"{msg_data['user']}: {msg_data['message']}")
+    # Поле для введення повідомлення
+    user_input = st.text_input("Ваше повідомлення:", value="", key="user_message")
+    if st.button("Відправити"):
+        if user_input.strip():  # Перевіряємо, чи поле не порожнє
+            # Зберігаємо повідомлення в локальну пам'ять
+            st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -162,11 +128,6 @@ if st.button("🔍 Обчислити"):
             st.success(f"Похідна: {result}")
     except Exception as e:
         st.error(f"Сталася помилка обчислення: {e}")
-
-# Видалення тимчасового файлу
-if os.path.exists("serviceAccountKey.json"):
-    os.remove("serviceAccountKey.json")
-    st.write("Тимчасовий файл із ключем успішно видалено.")
 
 # Додатковий стиль
 st.markdown(
