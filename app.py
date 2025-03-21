@@ -50,11 +50,11 @@ if user_function:
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
         # Підстановка значень для змінних y і z
-        st.markdown("### 🔄 Введіть значення змінних:")
-        substitutions = {}
-        for var in [y, z]:  # Для y і z
-            substitutions[var] = float(st.text_input(f"Введіть значення для {var}:", value="1"))
-        function = function.subs(substitutions)  # Підстановка значень
+st.markdown("### 🔄 Введіть значення змінних:")
+substitutions = {}
+for var in [y, z]:  # Для y і z
+    substitutions[var] = float(st.text_input(f"Введіть значення для {var}:", value="1"))
+function = function.subs(substitutions)  # Підстановка значень
 
         # Генеруємо числову версію функції
         func_np = sp.lambdify(x, function, 'numpy')
