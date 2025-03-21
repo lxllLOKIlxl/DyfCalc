@@ -2,20 +2,44 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
+import asyncio
+import websockets
+import threading
 
-# Лічильник кількості користувачів онлайн
+# Лічильник користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія чату (локальна пам'ять або файл)
+# Історія чату
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
-# Функція для відправки повідомлення
+# Асинхронний клієнт WebSocket для отримання повідомлень
+async def websocket_client():
+    uri = "ws://localhost:8765"
+    async with websockets.connect(uri) as websocket:
+        async for message in websocket:
+            st.session_state["chat_history"].append(message)
+
+# Функція для запуску WebSocket-клієнта в окремому потоці
+def start_websocket_client():
+    asyncio.run(websocket_client())
+
+if 'websocket_thread' not in st.session_state:
+    websocket_thread = threading.Thread(target=start_websocket_client, daemon=True)
+    websocket_thread.start()
+    st.session_state['websocket_thread'] = websocket_thread
+
+# Відправка повідомлень через WebSocket
+async def send_message_to_websocket(message):
+    uri = "ws://localhost:8765"
+    async with websockets.connect(uri) as websocket:
+        await websocket.send(message)
+
 def send_message():
     if "user_message" in st.session_state and st.session_state["user_message"].strip():
-        st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
+        asyncio.run(send_message_to_websocket(st.session_state["user_message"].strip()))
         st.session_state["user_message"] = ""
 
 # Заголовок із стилем
@@ -131,32 +155,3 @@ if st.button("🔍 Обчислити"):
             st.success(f"Похідна: {result}")
     except Exception as e:
         st.error(f"Сталася помилка обчислення: {e}")
-
-# Додатковий стиль
-st.markdown(
-    """
-    <style>
-    body {
-        background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
-    }
-    .stButton>button {
-        background-color: #007BFF; /* Синій колір кнопки */
-        color: white;
-        border: none;
-        padding: 6px 12px; /* Розмір кнопки */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px; /* Розмір тексту */
-        margin: 4px 2px;
-        border-radius: 8px;
-        transition-duration: 0.4s;
-    }
-    .stButton>button:hover {
-        background-color: #0056b3; /* Темніше синій при наведенні */
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
