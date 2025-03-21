@@ -3,3 +3,4 @@ numpy
 sympy
 streamlit
 plotly
+firebase-admin
