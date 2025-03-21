@@ -143,4 +143,23 @@ st.markdown(
         background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
     }
     .stButton>button {
-        background-color: #007BFF; /* Синій колір кноп
+        background-color: #007BFF; /* Синій колір кнопки */
+        color: white;        
+        border: none;
+        padding: 6px 12px; /* Розмір кнопки */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px; /* Розмір тексту */
+        margin: 4px 2px;
+        border-radius: 8px;
+        transition-duration: 0.4s;
+    }
+    .stButton>button:hover {
+        background-color: #0056b3; /* Темніше синій при наведенні */
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
