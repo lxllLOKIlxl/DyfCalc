@@ -2,17 +2,37 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
+import os
+import json
+import firebase_admin
+from firebase_admin import credentials, db
+
+# Ініціалізація Firebase через Streamlit Secrets
+firebase_key_raw = os.getenv("FIREBASE_KEY")  # Завантаження секрету з Streamlit Secrets
+if firebase_key_raw:
+    firebase_key = json.loads(firebase_key_raw)
+    if not firebase_admin._apps:
+        try:
+            cred = credentials.Certificate(firebase_key)
+            firebase_admin.initialize_app(cred, {
+                'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
+            })
+            st.write("Firebase успішно ініціалізовано!")
+        except ValueError as e:
+            st.error(f"Помилка ініціалізації Firebase: {e}")
+else:
+    st.error("FIREBASE_KEY не знайдено у секретах Streamlit!")
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія чату (локальна пам'ять або файл)
+# Історія чату
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
-# Функція для відправки повідомлення
+# Функція для відправлення повідомлення
 def send_message():
     if "user_message" in st.session_state and st.session_state["user_message"].strip():
         st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
