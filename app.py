@@ -2,32 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
-import os
-import json
 import firebase_admin
 from firebase_admin import credentials, db
-import time  # Для автоматичного оновлення
 
-# Ваша конфігурація Firebase (адаптована для Python SDK)
-firebaseConfig = {
-    "type": "service_account",
-    "project_id": "dyfcalc-chat",
-    "private_key_id": "<your_private_key_id>",
-    "private_key": "<your_private_key>",  # Замініть усі "\n" на "\\n"
-    "client_email": "firebase-adminsdk-fbsvc@dyfcalc-chat.iam.gserviceaccount.com",
-    "client_id": "104844286550364727471",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc@dyfcalc-chat.iam.gserviceaccount.com",
-    "databaseURL": "https://dyfcalc-chat-default-rtdb.firebaseio.com"
-}
-
-# Ініціалізація Firebase
+# Ініціалізація Firebase через локальний JSON-файл
 if not firebase_admin._apps:
-    cred = credentials.Certificate(firebaseConfig)
+    cred = credentials.Certificate("serviceAccountKey.json")  # Завантаження з локального файлу
     firebase_admin.initialize_app(cred, {
-        'databaseURL': firebaseConfig["databaseURL"]
+        'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
     })
 
 # Лічильник кількості користувачів онлайн
@@ -55,10 +37,6 @@ def send_message():
         st.session_state["chat_history"] = fetch_messages()  # Оновлення історії
         st.session_state["user_message"] = ""  # Очищення поля введення
 
-# Функція для автоматичного оновлення історії чату
-def update_chat():
-    st.session_state['chat_history'] = fetch_messages()
-
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
@@ -81,11 +59,20 @@ with st.sidebar:
     st.text_input("Ваше повідомлення:", value="", key="user_message")
     st.button("Відправити", key="send_button", on_click=send_message)
 
-# Автоматичне оновлення історії чату
-while True:
-    time.sleep(5)  # Оновлюємо кожні 5 секунд
-    update_chat()
-    st.experimental_rerun()
+    st.markdown("---")
+    st.header("🔧 Налаштування")
+    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+    st.markdown("---")
+    st.header("🎨 Оформлення")
+    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+    st.markdown("---")
+    st.markdown(
+        """
+        <div style="text-align: center; color: gray;">
+        Програма ver 1.0 • Запатентовано розробником Sm
+        </div>
+        """, unsafe_allow_html=True
+    )
 
 # Введення функції
 st.markdown(
