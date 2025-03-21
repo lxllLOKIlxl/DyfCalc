@@ -20,4 +20,5 @@ async def main():
         print("WebSocket-сервер запущено на ws://localhost:8765")
         await asyncio.Future()
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
