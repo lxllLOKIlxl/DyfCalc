@@ -8,6 +8,10 @@ if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1  # Ініціалізація
 st.session_state['user_count'] += 1
 
+# Історія повідомлень у чаті
+if 'chat_history' not in st.session_state:
+    st.session_state['chat_history'] = []
+
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
@@ -18,8 +22,34 @@ x, y, z = sp.symbols('x y z')  # Додані змінні y і z
 
 # Бокова панель із параметрами
 with st.sidebar:
+    # Лічильник користувачів
     st.header("👥 Користувачі")
     st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.markdown("---")
+
+    # Чат
+    st.header("💬 Онлайн-чат")
+    for msg in st.session_state['chat_history']:
+        st.write(msg)
+
+    # Поле для введення повідомлення
+    user_input = st.text_input("Напишіть повідомлення:")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("😊"):
+            user_input += " 😊"
+    with col2:
+        if st.button("😍"):
+            user_input += " 😍"
+    with col3:
+        if st.button("😅"):
+            user_input += " 😅"
+
+    # Додавання повідомлення до історії
+    if user_input:
+        st.session_state['chat_history'].append(f"Користувач: {user_input}")
+        user_input = ""  # Очистити поле після відправки
+
     st.markdown("---")
     st.header("🔧 Налаштування")
     operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
@@ -130,8 +160,8 @@ st.markdown(
     }
     .stButton>button {
         background-color: #4CAF50;
-        color: white;
-        border: none;        
+        color: white;        
+        border: none;
         padding: 10px 24px;
         text-align: center;
         text-decoration: none;
