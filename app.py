@@ -3,6 +3,11 @@ import numpy as np
 import streamlit as st
 import sympy as sp
 
+# Лічильник кількості користувачів онлайн (локальний підрахунок у сесії)
+if 'user_count' not in st.session_state:
+    st.session_state['user_count'] = 1  # Ініціалізація
+st.session_state['user_count'] += 1
+
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
@@ -13,6 +18,9 @@ x, y, z = sp.symbols('x y z')  # Додані змінні y і z
 
 # Бокова панель із параметрами
 with st.sidebar:
+    st.header("👥 Користувачі")
+    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.markdown("---")
     st.header("🔧 Налаштування")
     operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
     st.markdown("---")
@@ -21,14 +29,13 @@ with st.sidebar:
     st.markdown("---")
     st.markdown(
         """
-        <div style="font-size: 10px; text-align: center; color: gray;">
+        <div style="text-align: center; color: gray;">
         Програма ver 1.0 • Запатентовано розробником Sm
         </div>
-        """,
-        unsafe_allow_html=True
+        """, unsafe_allow_html=True
     )
 
-# Введення функції з рамкою та стилем
+# Введення функції
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -111,8 +118,6 @@ if st.button("🔍 Обчислити"):
         elif operation == "Диференціювання":
             result = sp.diff(function, x)
             st.success(f"Похідна: {result}")
-    except ZeroDivisionError as zde:
-        st.error(f"Ви щось зробили не так: {zde}")
     except Exception as e:
         st.error(f"Сталася помилка обчислення: {e}")
 
