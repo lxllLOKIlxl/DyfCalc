@@ -17,6 +17,9 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
+# Оголошення змінних
+x, y, z = sp.symbols('x y z')  # Додані змінні y і z
+
 # Бокова панель із параметрами
 with st.sidebar:
     # Лічильник користувачів
@@ -30,11 +33,11 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:")
+    user_input = st.text_input("Ваше повідомлення:", key="chat_input")
     if st.button("Відправити"):
-        if user_input.strip():  # Перевірка на порожнє значення
+        if user_input.strip():  # Перевірка, щоб повідомлення не було порожнім
             st.session_state['chat_history'].append(f"Користувач: {user_input}")
-            user_input = ""  # Очистимо локальну змінну для вводу
+            st.experimental_rerun()  # Оновлюємо чат після відправки
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -51,7 +54,7 @@ with st.sidebar:
         """, unsafe_allow_html=True
     )
 
-# Основна функціональність
+# Введення функції
 st.markdown(
     """
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
@@ -62,17 +65,17 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
 
-# Побудова графіка функції
+# Побудова графіка функції з перевіркою
 if user_function:
     try:
-        x, y, z = sp.symbols('x y z')
+        # Перетворення функції у SymPy вираз
         function = sp.sympify(user_function)
 
         # Перевірка ділення на нуль
         if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
             raise ZeroDivisionError("Ділення на нуль не допускається!")
 
-        # Підстановка значень для змінних y і z
+        # Підстановка значень для змінних y і z, якщо вони є у функції
         substitutions = {var: 1 for var in [y, z] if var in function.free_symbols}
         function = function.subs(substitutions)
 
@@ -81,7 +84,7 @@ if user_function:
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
-        # Побудова графіка
+        # Відображення графіка
         if st.checkbox("📊 Показати графік функції"):
             fig, ax = plt.subplots()
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
@@ -95,7 +98,20 @@ if user_function:
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
 
-# Стилізація
+# Кнопка для обчислення
+if st.button("🔍 Обчислити"):
+    try:
+        # Інтегрування або диференціювання
+        if operation == "Інтегрування":
+            result = sp.integrate(function, x)
+            st.success(f"Інтеграл: {result}")
+        elif operation == "Диференціювання":
+            result = sp.diff(function, x)
+            st.success(f"Похідна: {result}")
+    except Exception as e:
+        st.error(f"Сталася помилка обчислення: {e}")
+
+# Додатковий стиль
 st.markdown(
     """
     <style>
