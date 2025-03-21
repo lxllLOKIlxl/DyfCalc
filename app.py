@@ -2,15 +2,32 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
+import firebase_admin
+from firebase_admin import credentials, db
+import os
+import json
+
+# Ініціалізація Firebase
+firebase_key = json.loads(os.getenv("FIREBASE_KEY"))
+if not firebase_admin._apps:
+    cred = credentials.Certificate(firebase_key)
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
+    })
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія повідомлень у чаті
-if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
+# Чат-функції
+def save_message_to_db(user, message):
+    ref = db.reference('messages')
+    ref.push({'user': user, 'message': message})
+
+def fetch_messages():
+    ref = db.reference('messages')
+    return ref.get()
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -26,15 +43,16 @@ with st.sidebar:
 
     # Чат
     st.header("💬 Онлайн-чат")
-    for msg in st.session_state['chat_history']:
-        st.write(msg)
-
-    # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:", value="", key="user_message")
+    user_input = st.text_input("Ваше повідомлення:", key="user_message")
     if st.button("Відправити"):
-        if user_input.strip():  # Перевіряємо, чи поле не порожнє
-            # Додаємо повідомлення до історії
-            st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
+        if user_input.strip():  # Перевірка на непорожнє значення
+            save_message_to_db("Користувач", user_input.strip())  # Збереження у Firebase
+
+    # Отримання повідомлень із Firebase
+    messages = fetch_messages()
+    if messages:
+        for msg_id, msg_data in messages.items():
+            st.write(f"{msg_data['user']}: {msg_data['message']}")
 
     st.markdown("---")
     st.header("🔧 Налаштування")
