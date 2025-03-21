@@ -130,9 +130,9 @@ st.markdown(
     .stButton>button {
         background-color: #4CAF50;
         color: white;
-        border: none;
+        border: none;        
         padding: 10px 24px;
-        text-align: center;        
+        text-align: center;
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
