@@ -12,9 +12,9 @@ st.session_state['user_count'] += 1
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 
-# Тимчасове поле для введення
-if 'temp_input' not in st.session_state:
-    st.session_state['temp_input'] = ""  # Ініціалізація тимчасового поля
+# Ініціалізуємо тимчасове поле для введення, якщо його ще немає
+if 'chat_input' not in st.session_state:
+    st.session_state['chat_input'] = ""
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -34,11 +34,13 @@ with st.sidebar:
         st.write(msg)
 
     # Поле для введення повідомлення
-    user_input = st.text_input("Ваше повідомлення:", value=st.session_state['temp_input'], key="chat_input")
+    user_input = st.text_input("Ваше повідомлення:", value=st.session_state['chat_input'], key="chat_input")
     if st.button("Відправити"):
-        if user_input.strip():  # Перевірка, чи поле не порожнє
+        if user_input.strip():  # Перевіряємо, чи поле не порожнє
+            # Додаємо повідомлення до історії
             st.session_state['chat_history'].append(f"Користувач: {user_input.strip()}")
-            st.session_state['temp_input'] = ""  # Очищення тимчасового поля
+            # Очищуємо поле введення після додавання
+            st.session_state['chat_input'] = ""
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -141,23 +143,4 @@ st.markdown(
         background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
     }
     .stButton>button {
-        background-color: #007BFF; /* Синій колір кнопки */
-        color: white;        
-        border: none;
-        padding: 6px 12px; /* Розмір кнопки */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px; /* Розмір тексту */
-        margin: 4px 2px;
-        border-radius: 8px;
-        transition-duration: 0.4s;
-    }
-    .stButton>button:hover {
-        background-color: #0056b3; /* Темніше синій при наведенні */
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+        background-color: #007BFF; /* Синій колір кноп
