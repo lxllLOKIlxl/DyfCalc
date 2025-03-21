@@ -6,6 +6,7 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials, db
+import time  # Для автоматичного оновлення
 
 # Ініціалізація Firebase через Streamlit Secrets
 firebase_key_raw = os.getenv("FIREBASE_KEY")  # Завантаження секрету з Streamlit Secrets
@@ -35,7 +36,7 @@ def save_message(user, message):
 
 def fetch_messages():
     ref = db.reference('messages')  # Отримання повідомлень із бази даних
-    return ref.get() or {}  # Повернення повідомлень, якщо вони існують
+    return ref.get() or {}  # Повертаємо всі повідомлення
 
 # Історія чату
 if 'chat_history' not in st.session_state:
@@ -47,6 +48,10 @@ def send_message():
         save_message("Користувач", st.session_state["user_message"].strip())
         st.session_state["chat_history"] = fetch_messages()  # Оновлення історії
         st.session_state["user_message"] = ""  # Очищення поля введення
+
+# Функція для автоматичного оновлення історії чату
+def update_chat():
+    st.session_state['chat_history'] = fetch_messages()
 
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
@@ -70,20 +75,11 @@ with st.sidebar:
     st.text_input("Ваше повідомлення:", value="", key="user_message")
     st.button("Відправити", key="send_button", on_click=send_message)
 
-    st.markdown("---")
-    st.header("🔧 Налаштування")
-    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
-    st.markdown("---")
-    st.header("🎨 Оформлення")
-    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
-    st.markdown("---")
-    st.markdown(
-        """
-        <div style="text-align: center; color: gray;">
-        Програма ver 1.0 • Запатентовано розробником Sm
-        </div>
-        """, unsafe_allow_html=True
-    )
+# Автоматичне оновлення історії чату
+while True:
+    time.sleep(5)  # Оновлюємо кожні 5 секунд
+    update_chat()
+    st.experimental_rerun()
 
 # Введення функції
 st.markdown(
