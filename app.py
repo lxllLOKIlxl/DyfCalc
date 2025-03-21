@@ -34,22 +34,9 @@ with st.sidebar:
 
     # Поле для введення повідомлення
     user_input = st.text_input("Напишіть повідомлення:", key="chat_input")
-
-    # Кнопки для смайликів
-    col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
-    with col1:
-        if st.button("😊", key="smile"):
-            user_input += " 😊"
-    with col2:
-        if st.button("😍", key="love"):
-            user_input += " 😍"
-    with col3:
-        if st.button("😅", key="laugh"):
-            user_input += " 😅"
-    with col4:
-        if st.button("Відправити"):
-            if user_input.strip():  # Перевірка непорожнього повідомлення
-                st.session_state['chat_history'].append(f"Користувач: {user_input}")
+    if st.button("Відправити", key="send"):
+        if user_input.strip():  # Перевірка непорожнього повідомлення
+            st.session_state['chat_history'].append(f"Користувач: {user_input}")
 
     st.markdown("---")
     st.header("🔧 Налаштування")
@@ -163,19 +150,18 @@ st.markdown(
         background-color: #4CAF50;
         color: white;        
         border: none;
-        padding: 10px 24px;
+        padding: 6px 12px; /* Розмір кнопки */
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 16px;
+        font-size: 14px; /* Розмір тексту */
         margin: 4px 2px;
-        border-radius: 12px;
+        border-radius: 8px;
         transition-duration: 0.4s;
     }
     .stButton>button:hover {
-        background-color: white;
-        color: black;
-        border: 2px solid #4CAF50;
+        background-color: #007BFF; /* Синій колір при наведенні */
+        color: white;
     }
     </style>
     """,
