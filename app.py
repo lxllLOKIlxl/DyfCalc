@@ -7,12 +7,15 @@ from firebase_admin import credentials, db
 import os
 import json
 
-# Ініціалізація Firebase
-firebase_key = json.loads(os.getenv("FIREBASE_KEY"))
+# Ініціалізація Firebase через секрети Streamlit
+firebase_key_raw = os.getenv("FIREBASE_KEY")  # Отримуємо секрет
+if not firebase_key_raw:
+    st.error("FIREBASE_KEY не знайдено! Перевірте секрети Streamlit Cloud.")
+firebase_key = json.loads(firebase_key_raw)  # Завантажуємо JSON
 if not firebase_admin._apps:
     cred = credentials.Certificate(firebase_key)
     firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'
+        'databaseURL': 'https://dyfcalc-chat-default-rtdb.firebaseio.com/'  # URL вашої бази
     })
 
 # Лічильник кількості користувачів онлайн
@@ -45,7 +48,7 @@ with st.sidebar:
     st.header("💬 Онлайн-чат")
     user_input = st.text_input("Ваше повідомлення:", key="user_message")
     if st.button("Відправити"):
-        if user_input.strip():  # Перевірка на непорожнє значення
+        if user_input.strip():
             save_message_to_db("Користувач", user_input.strip())  # Збереження у Firebase
 
     # Отримання повідомлень із Firebase
