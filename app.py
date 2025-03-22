@@ -104,7 +104,7 @@ with st.sidebar:
     st.markdown(
         """
         <div style="text-align: center; color: gray;">
-        Програма ver 1.0 • Запатентовано розробником Sm
+        Програма ver 1.0 • Студент 1 курса Шаблінський С.І.
         </div>
         """, unsafe_allow_html=True
     )
