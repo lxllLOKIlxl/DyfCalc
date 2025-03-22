@@ -1,6 +1,11 @@
+import streamlit as st
 import firebase_admin
 from firebase_admin import credentials
 
+# Тимчасово перевіряємо, чи завантажуються секрети
+st.write(st.secrets["firebase"])
+
+# Ваш подальший код для підключення Firebase...
 cred = credentials.Certificate({
     "type": st.secrets["firebase"]["type"],
     "project_id": st.secrets["firebase"]["project_id"],
@@ -12,6 +17,9 @@ cred = credentials.Certificate({
     "token_uri": st.secrets["firebase"]["token_uri"],
     "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
     "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+})
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'
 })
 
 # Функція для тестування підключення до Firebase
