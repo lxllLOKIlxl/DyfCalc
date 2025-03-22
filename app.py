@@ -16,7 +16,6 @@ def get_messages():
     messages = ref.get()
     if messages:
         return [(msg["user"], msg["text"]) for msg in messages.values()]
-    return []
 # Інтерфейс чату
 st.title("Онлайн-чат")
 
