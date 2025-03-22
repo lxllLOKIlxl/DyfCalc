@@ -1,21 +1,53 @@
+import firebase_admin
+from firebase_admin import credentials, db
+import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-import streamlit as st
 import sympy as sp
+
+# Підключення Firebase через Streamlit secrets
+cred = credentials.Certificate({
+    "type": st.secrets["firebase"]["type"],
+    "project_id": st.secrets["firebase"]["project_id"],
+    "private_key_id": st.secrets["firebase"]["private_key_id"],
+    "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+    "client_email": st.secrets["firebase"]["client_email"],
+    "client_id": st.secrets["firebase"]["client_id"],
+    "auth_uri": st.secrets["firebase"]["auth_uri"],
+    "token_uri": st.secrets["firebase"]["token_uri"],
+    "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+})
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'  # Замініть на ваш URL
+})
+
+# Функції для роботи з Firebase
+def save_message(user, message):
+    ref = db.reference('messages')  # Посилання на базу даних
+    ref.push({
+        'user': user,
+        'message': message
+    })
+
+def fetch_messages():
+    ref = db.reference('messages')  # Посилання на базу даних
+    return ref.get() or {}
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія чату (локальна пам'ять або файл)
+# Історія чату (оновлюється через Firebase)
 if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
+    st.session_state['chat_history'] = fetch_messages()
 
 # Функція для відправки повідомлення
 def send_message():
     if "user_message" in st.session_state and st.session_state["user_message"].strip():
-        st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
+        save_message("Користувач", st.session_state["user_message"].strip())
+        st.session_state['chat_history'] = fetch_messages()
         st.session_state["user_message"] = ""
 
 # Заголовок із стилем
@@ -32,12 +64,13 @@ with st.sidebar:
 
     # Чат
     st.header("💬 Онлайн-чат")
-    for msg in st.session_state['chat_history']:
-        st.write(msg)
+    chat_history = st.session_state['chat_history']
+    for msg_id, msg_data in chat_history.items():
+        st.write(f"{msg_data['user']}: {msg_data['message']}")
 
     # Поле для введення повідомлення
     st.text_input("Ваше повідомлення:", value="", key="user_message")
-    st.button("Відправити", key="send_button", on_click=send_message)
+    st.button("Відправити", on_click=send_message)
 
     st.markdown("---")
     st.header("🔧 Налаштування")
