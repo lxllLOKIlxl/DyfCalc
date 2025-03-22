@@ -2,7 +2,7 @@ import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, db
 
-# Перевірка, чи Firebase вже ініціалізований
+# Ініціалізація Firebase з перевіркою
 if not firebase_admin._apps:
     cred = credentials.Certificate({
         "type": st.secrets["firebase"]["type"],
@@ -22,21 +22,28 @@ if not firebase_admin._apps:
 
 # Функція для надсилання повідомлень
 def send_message(user, text):
-    ref = db.reference('messages')
-    new_message = {
-        "user": user,
-        "text": text
-    }
-    ref.push(new_message)
-    st.success("Повідомлення надіслано!")
+    try:
+        ref = db.reference('messages')
+        new_message = {
+            "user": user,
+            "text": text
+        }
+        ref.push(new_message)
+        st.success("Повідомлення надіслано!")
+    except Exception as e:
+        st.error(f"Помилка надсилання повідомлення: {e}")
 
 # Функція для отримання повідомлень
 def get_messages():
-    ref = db.reference('messages')
-    messages = ref.get()
-    if messages:
-        return [(msg["user"], msg["text"]) for msg in messages.values()]
-    return []
+    try:
+        ref = db.reference('messages')
+        messages = ref.get()
+        if messages:
+            return [(msg["user"], msg["text"]) for msg in messages.values()]
+        return []
+    except Exception as e:
+        st.error(f"Помилка отримання даних: {e}")
+        return []
 
 # Інтерфейс чату
 st.title("Чат з Firebase")
