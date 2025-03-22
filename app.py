@@ -76,38 +76,23 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Бокова панель із параметрами
-with st.sidebar:
-    # Лічильник користувачів
-    st.header("👥 Користувачі")
-    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
-    st.markdown("---")
+# Налаштування
+st.header("🔧 Налаштування")
+operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+st.markdown("---")
 
-    # Чат
-    st.header("💬 Онлайн-чат")
-    messages = get_messages()
-    for user, text in messages:
-        st.write(f"**{user}:** {text}")
+# Чат
+st.header("💬 Онлайн-чат")
+messages = get_messages()
+for user, text in messages:
+    st.write(f"**{user}:** {text}")
 
-    # Поле для введення повідомлення
-    st.text_input("Ваше ім'я:", key="user_name")
-    st.text_input("Ваше повідомлення:", key="user_message")
-    st.button("Відправити", on_click=send_message)
+st.text_input("Ваше ім'я:", key="user_name")
+st.text_input("Ваше повідомлення:", key="user_message")
+st.button("Відправити", on_click=send_message)
 
-    st.markdown("---")
-    st.header("🔧 Налаштування")
-    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
-    st.markdown("---")
-    st.header("🎨 Оформлення")
-    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
-    st.markdown("---")
-    st.markdown(
-        """
-        <div style="text-align: center; color: gray;">
-        Програма ver 1.0 • Студент 1 курса Шаблінський С.І.
-        </div>
-        """, unsafe_allow_html=True
-    )
+st.markdown("---")
 
 # Введення функції
 st.markdown(
