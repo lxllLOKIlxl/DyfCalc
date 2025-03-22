@@ -25,24 +25,30 @@ if not firebase_admin._apps:
     })
 
 # Функція для відправки повідомлення в Firebase
-def send_message(user, text):
-    try:
-        ref = db.reference('messages')
-        new_message = {
-            "user": user,
-            "text": text,
-            "timestamp": int(time.time())  # Час у UNIX-форматі
-        }
-        ref.push(new_message)
-        st.success("Повідомлення надіслано!")
-    except Exception as e:
-        st.error(f"Помилка надсилання повідомлення: {e}")
+def send_message():
+    if "user_message" in st.session_state and "user_name" in st.session_state:
+        user = st.session_state["user_name"]
+        text = st.session_state["user_message"]
+        try:
+            ref = db.reference('messages')
+            new_message = {
+                "user": user,
+                "text": text,
+                "timestamp": int(time.time())  # Час у UNIX-форматі
+            }
+            ref.push(new_message)
+            st.success("Повідомлення надіслано!")
+            st.session_state["user_message"] = ""  # Очищення поля після відправки
+        except Exception as e:
+            st.error(f"Помилка надсилання повідомлення: {e}")
+    else:
+        st.warning("Будь ласка, введіть ім'я та текст!")
 
 # Функція для отримання повідомлень із Firebase
 def get_messages():
     try:
         current_time = int(time.time())
-        cutoff_time = current_time - 40  # Повідомлення старше 40 секунд видаляються
+        cutoff_time = current_time - 40  # Видалення повідомлень старше 40 секунд
         ref = db.reference('messages')
 
         # Видалення старих повідомлень
@@ -84,13 +90,9 @@ with st.sidebar:
         st.write(f"**{user}:** {text}")
 
     # Поле для введення повідомлення
-    user_name = st.text_input("Ваше ім'я (обов'язково)", key="user_name")
-    user_message = st.text_input("Ваше повідомлення:", key="user_message")
-    if st.button("Відправити"):
-        if user_name and user_message:
-            send_message(user_name, user_message)
-        else:
-            st.warning("Будь ласка, заповніть усі поля!")
+    st.text_input("Ваше ім'я:", key="user_name")
+    st.text_input("Ваше повідомлення:", key="user_message")
+    st.button("Відправити", on_click=send_message)
 
     st.markdown("---")
     st.header("🔧 Налаштування")
