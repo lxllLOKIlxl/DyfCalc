@@ -76,23 +76,29 @@ st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", un
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Налаштування
-st.header("🔧 Налаштування")
-operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
-theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
-st.markdown("---")
+# Бокова панель із параметрами та чатом
+with st.sidebar:
+    # Лічильник користувачів
+    st.header("👥 Користувачі")
+    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.markdown("---")
 
-# Чат
-st.header("💬 Онлайн-чат")
-messages = get_messages()
-for user, text in messages:
-    st.write(f"**{user}:** {text}")
+    # Налаштування
+    st.header("🔧 Налаштування")
+    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+    st.markdown("---")
 
-st.text_input("Ваше ім'я:", key="user_name")
-st.text_input("Ваше повідомлення:", key="user_message")
-st.button("Відправити", on_click=send_message)
+    # Чат
+    st.header("💬 Онлайн-чат")
+    messages = get_messages()
+    for user, text in messages:
+        st.write(f"**{user}:** {text}")
 
-st.markdown("---")
+    # Поле для введення повідомлення
+    st.text_input("Ваше ім'я:", key="user_name")
+    st.text_input("Ваше повідомлення:", key="user_message")
+    st.button("Відправити", on_click=send_message)
 
 # Введення функції
 st.markdown(
