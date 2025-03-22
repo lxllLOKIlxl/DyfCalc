@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sympy as sp
 
+# Тимчасове тестування завантаження секретів
+st.write(st.secrets["firebase"])
+
 # Підключення Firebase через Streamlit secrets
 cred = credentials.Certificate({
     "type": st.secrets["firebase"]["type"],
@@ -19,7 +22,7 @@ cred = credentials.Certificate({
     "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
 })
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'  # Замініть на ваш URL
+    'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'
 })
 
 # Функції для роботи з Firebase
