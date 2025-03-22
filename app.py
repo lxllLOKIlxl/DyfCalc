@@ -130,10 +130,28 @@ if user_function:
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
+        # Знаходження коренів функції
+        roots = sp.solve(function, x)
+        roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
+
         # Побудова графіка
         if st.checkbox("📊 Показати графік функції"):
             fig, ax = plt.subplots(figsize=(8, 5))
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
+
+            # Додавання точок перетину
+            for root in roots_np:
+                ax.scatter(root, 0, color="red", s=50, label=f"Точка перетину: {root:.2f}")
+                ax.annotate(
+                    f"{root:.2f}",
+                    (root, 0),
+                    textcoords="offset points",
+                    xytext=(0, 10),
+                    ha="center",
+                    fontsize=10,
+                    bbox=dict(boxstyle="round,pad=0.3", edgecolor="red", facecolor="lightyellow")
+                )
+
             ax.set_title("Графік функції", fontsize=16)
             ax.set_xlabel("x", fontsize=14)
             ax.set_ylabel("f(x)", fontsize=14)
