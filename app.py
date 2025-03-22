@@ -17,7 +17,7 @@ cred = credentials.Certificate({
 })
 
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://ВАШ_PROJECT_ID-default-rtdb.firebaseio.com/'
+    'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'
 })
 
 # Функція для тестування бази даних
