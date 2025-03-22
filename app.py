@@ -1,23 +1,22 @@
 import firebase_admin
-from firebase_admin import credentials, db
-import streamlit as st
+from firebase_admin import credentials
 
-# Підключення Firebase через Streamlit secrets
 cred = credentials.Certificate({
-    "type": st.secrets["firebase"]["type"],
-    "project_id": st.secrets["firebase"]["project_id"],
-    "private_key_id": st.secrets["firebase"]["private_key_id"],
-    "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
-    "client_email": st.secrets["firebase"]["client_email"],
-    "client_id": st.secrets["firebase"]["client_id"],
-    "auth_uri": st.secrets["firebase"]["auth_uri"],
-    "token_uri": st.secrets["firebase"]["token_uri"],
-    "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
-    "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+    "type": "service_account",
+    "project_id": "chatproject-6722b",
+    "private_key_id": "ваш_private_key_id",
+    "private_key": "-----BEGIN PRIVATE KEY-----\\nВАШ ПРИВАТНИЙ КЛЮЧ\\n-----END PRIVATE KEY-----\\n",
+    "client_email": "firebase-adminsdk-fbsvc@chatproject-6722b.iam.gserviceaccount.com",
+    "client_id": "773472907651",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc@chatproject-6722b.iam.gserviceaccount.com"
 })
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://chatproject-6722b-default-rtdb.firebaseio.com/'
 })
+)
 
 # Функція для тестування підключення до Firebase
 def test_firebase_connection():
