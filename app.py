@@ -110,7 +110,7 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
 
-# Побудова графіка функції
+# Побудова графіка функції з перевіркою
 if user_function:
     try:
         x, y, z = sp.symbols('x y z')
@@ -150,6 +150,7 @@ if user_function:
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
 
+# Кнопка для обчислення
 if st.button("🔍 Обчислити"):
     try:
         if operation == "Інтегрування":
