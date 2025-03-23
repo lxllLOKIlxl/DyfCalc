@@ -145,7 +145,7 @@ with st.sidebar:
         for user, text in messages:
             st.write(f"**{user}:** {text}")
     else:
-        st.write(translations.get("no_results", "No messages found."))  # Якщо повідомлень немає
+        st.write(translations.get("no_messages", "Немає повідомлень для відображення"))  # Відповідний текст для чату
 
     # Поле для введення імені
     user_name = st.text_input(
@@ -154,10 +154,9 @@ with st.sidebar:
     )
 
     # Поле для введення повідомлення
-    user_message_key = "user_message_input"
     user_message = st.text_input(
         translations["message_prompt"], 
-        key=user_message_key
+        key="user_message"
     )
 
     # Кнопка для відправлення повідомлення
@@ -168,9 +167,6 @@ with st.sidebar:
             st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення
-
-            # Використовуємо тимчасову змінну, щоб уникнути конфлікту
-            st.session_state[user_message_key] = ""  # Поле очищується після відправлення через тимчасовий ключ
 
     # Додати інформацію про автора
     st.markdown("---")
