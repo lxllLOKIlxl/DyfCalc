@@ -156,7 +156,8 @@ with st.sidebar:
     # Поле для введення повідомлення
     user_message = st.text_input(
         translations["message_prompt"], 
-        key="user_message"
+        key="user_message",
+        value=""  # Ініціалізуємо поле порожнім при кожному рендері
     )
 
     # Кнопка для відправлення повідомлення
@@ -167,9 +168,7 @@ with st.sidebar:
             st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення
-
-            # Очищення полів після надсилання
-            st.session_state["user_message"] = ""  # Очищаємо поле для повідомлень
+            # Очищення `st.session_state["user_message"]` НЕ потрібне, бо поле вже очищається через `value=""` під час наступного рендеру
 
     # Додати інформацію про автора
     st.markdown("---")
