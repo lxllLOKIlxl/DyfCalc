@@ -134,46 +134,23 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Чат у боковій панелі
-with st.sidebar:
-    # Заголовок чату
+    # Чат
     st.header(f"💬 {translations['online_chat']}")
-
-    # Відображення повідомлень
     messages = get_messages()
-    if messages:  # Якщо є повідомлення
-        for user, text in messages:
-            st.write(f"**{user}:** {text}")
-    else:
-        st.write("Наразі немає повідомлень.")  # Коректний текст для порожнього чату
+    for user, text in messages:
+        st.write(f"**{user}:** {text}")
 
-    # Поле для введення імені
-    user_name = st.text_input(
-        translations["name_prompt"], 
-        key="user_name"
-    )
-
-    # Тимчасова змінна для роботи з введеним текстом
-    user_message = st.text_input(
-        translations["message_prompt"], 
-        key="user_message",
-        value=""  # Ініціалізація поля як порожнього для кожного рендера
-    )
-
-    # Кнопка для відправки повідомлення
-    if st.button(translations["send_button_chat"]):  # Використання правильного ключа "Відправити"
-        if not user_name.strip():  # Перевірка, чи введено ім'я
+    # Поле для введення повідомлення
+    user_name = st.text_input(translations["name_prompt"], key="user_name")
+    user_message = st.text_input(translations["message_prompt"], key="user_message")
+    if st.button(translations["send_button"]):
+        if not user_name.strip():  # Перевірка, чи введене ім'я
             st.warning(translations["name_warning"])
-        elif not user_message.strip():  # Перевірка, чи введено повідомлення
+        elif not user_message.strip():  # Перевірка, чи введене повідомлення
             st.warning(translations["message_warning"])
         else:
-            send_message()  # Виклик функції для відправки повідомлення
-            st.text_input(  # Оновлюємо поле для вводу
-                translations["message_prompt"], 
-                key="user_message",
-                value=""  # Очищення після відправки
-            )
-
+            send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
+            
     # Додати інформацію про автора
     st.markdown("---")
     st.markdown(
