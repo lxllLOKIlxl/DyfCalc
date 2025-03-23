@@ -5,5 +5,12 @@
     "send_button": "Send",
     "operation_prompt": "Choose an operation",
     "theme_prompt": "Choose a theme",
-    "project_by": "Project by"
+    "project_by": "Project by",
+    "interface_language": "Interface language",
+    "select_language": "Select a language:",
+    "online_users": "Users",
+    "online_count": "users online",
+    "online_chat": "Online Chat",
+    "input_example": "For example, x**2 - 4*x + y + z",
+    "calculation_prompt": "Enter a function for calculation:"
 }
