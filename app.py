@@ -79,14 +79,9 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    # Встановлюємо унікальний ключ для елементу radio
-    st.header(f"🌐 {translations['interface_language']}")
-    lang_choice = st.radio(
-        translations["select_language"], 
-        ["uk", "en"], 
-        key="language_radio"  # Унікальний ключ для radio
-    )
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"], key="language_radio")  # Унікальний ключ для radio
     translations = load_language(lang_choice)  # Завантаження перекладу після вибору мови
+    st.header(f"🌐 {translations['interface_language']}")  # Локалізований заголовок
 
 # Заголовок із стилем
 st.markdown(f"<h1 style='text-align: center; color: blue;'>🔢 {translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
