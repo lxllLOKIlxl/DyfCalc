@@ -4,7 +4,13 @@ import streamlit as st
 import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
+import json
 import time  # Для роботи з часовими мітками
+
+# Функція для завантаження файлів перекладу
+def load_language(lang):
+    with open(f"translations/{lang}.json", "r", encoding="utf-8") as file:
+        return json.load(file)
 
 # Ініціалізація Firebase з перевіркою
 if not firebase_admin._apps:
@@ -71,8 +77,14 @@ if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
+# Вибір мови
+with st.sidebar:
+    st.header("🌐 Мова інтерфейсу")
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"])  # Українська або Англійська
+    translations = load_language(lang_choice)  # Завантаження перекладу
+
 # Заголовок із стилем
-st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='text-align: center; color: blue;'>🔢 {translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
@@ -85,8 +97,8 @@ with st.sidebar:
 
     # Налаштування
     st.header("🔧 Налаштування")
-    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
-    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+    operation = st.radio(translations["operation_prompt"], ["Інтегрування", "Диференціювання"])
+    theme = st.radio(translations["theme_prompt"], ["Світла", "Темна"])
     st.markdown("---")
 
     # Чат
@@ -96,27 +108,31 @@ with st.sidebar:
         st.write(f"**{user}:** {text}")
 
     # Поле для введення повідомлення
-    user_name = st.text_input("Ваше ім'я:", key="user_name")
-    user_message = st.text_input("Ваше повідомлення:", key="user_message")
-    if st.button("Відправити"):
+    user_name = st.text_input(translations["name_prompt"], key="user_name")
+    user_message = st.text_input(translations["message_prompt"], key="user_message")
+    if st.button(translations["send_button"]):
         if not user_name.strip():  # Перевірка, чи введене ім'я
-            st.warning("Будь ласка, введіть ваше ім'я перед відправленням повідомлення!")
+            st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введене повідомлення
-            st.warning("Повідомлення не може бути порожнім!")
+            st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
 
     # Додати інформацію про автора
     st.markdown("---")
     st.markdown(
-        """
+        f"""
         <div style="text-align: center; color: gray;">
-        Проєкт виконав:<br>
+        {translations["project_by"]}<br>
         <b>Студент 1 курсу ІПЗ-24-1-if</b><br>
         <b>Шаблінський С.І.</b>
         </div>
         """, unsafe_allow_html=True
     )
+
+# Основний функціонал програми залишається без змін:
+# Додавайте функцію побудови графіків та інтегралів/похідних у відповідному місці.
+
 
 # Введення функції
 st.markdown(
