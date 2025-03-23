@@ -111,16 +111,22 @@ with st.sidebar:
     theme = st.radio(translations["theme_prompt"], ["Світла", "Темна"])
     st.markdown("---")
 
-# Чат
-st.header(f"💬 {translations['online_chat']}")
-
-# Відображення повідомлень
-messages = get_messages()
-if messages:
+    # Чат
+    st.header(f"💬 {translations['online_chat']}")
+    messages = get_messages()
     for user, text in messages:
         st.write(f"**{user}:** {text}")
-else:
-    st.write("Наразі немає повідомлень.")
+
+    # Поле для введення повідомлення
+    user_name = st.text_input(translations["name_prompt"], key="user_name")
+    user_message = st.text_input(translations["message_prompt"], key="user_message")
+    if st.button(translations["send_button_chat"]):  # Виправлено текст кнопки
+        if not user_name.strip():  # Перевірка, чи введене ім'я
+            st.warning(translations["name_warning"])
+        elif not user_message.strip():  # Перевірка, чи введене повідомлення
+            st.warning(translations["message_warning"])
+        else:
+            send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
 
 # Поле для введення повідомлення
 user_name = st.text_input(translations["name_prompt"], key="user_name")
