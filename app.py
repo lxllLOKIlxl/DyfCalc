@@ -103,10 +103,18 @@ st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
-    # Лічильник користувачів
-    st.header(f"👥 {translations['online_users']}")
-    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} {translations['online_count']}**")
-    st.markdown("---")
+    # Лічильник користувачів із емодзі 👥
+    st.markdown(
+        f"""
+        <div style="background-color: rgba(230, 245, 230, 0.8); padding: 8px; border-radius: 12px; border: 1px solid rgba(200, 200, 200, 0.6); margin-bottom: 10px; text-align: center;">
+            <h4 style="margin: 0; color: #333; font-family: Arial, sans-serif;">👥 {translations['online_users']}</h4>
+            <p style="margin: 0; font-size: 16px; color: #000; font-weight: bold;">👤 {st.session_state['user_count']} {translations['online_count']}</p>
+        </div>
+        <hr style="border: none; border-top: 1px solid rgba(180, 180, 180, 0.8); margin: 8px 0;">
+        """
+        , unsafe_allow_html=True
+    )
+
 
     # Налаштування
     st.header("🔧 Налаштування")
