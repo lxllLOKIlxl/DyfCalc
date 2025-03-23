@@ -1,0 +1,6 @@
+{
+    "greeting": "Вітаємо",
+    "name_prompt": "Ваше ім'я",
+    "message_prompt": "Ваше повідомлення",
+    "send_button": "Відправити"
+}
