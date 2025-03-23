@@ -2,7 +2,7 @@
     "greeting": "Вітаємо",
     "name_prompt": "Ваше ім'я",
     "message_prompt": "Ваше повідомлення",
-    "send_button": "Відправити",
+    "send_button": "Обчислити",
     "operation_prompt": "Оберіть операцію",
     "theme_prompt": "Оберіть тему",
     "project_by": "Проєкт виконав",
@@ -12,5 +12,7 @@
     "online_count": "користувач(і/ів) онлайн",
     "online_chat": "Онлайн-чат",
     "input_example": "Наприклад, x**2 - 4*x + y + z",
-    "calculation_prompt": "Введіть функцію для обчислення:"
+    "calculation_prompt": "Введіть функцію для обчислення:",
+    "name_warning": "Будь ласка, введіть ваше ім'я перед відправленням повідомлення!",
+    "message_warning": "Повідомлення не може бути порожнім!"
 }
