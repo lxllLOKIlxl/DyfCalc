@@ -2,8 +2,8 @@
     "greeting": "Welcome",
     "name_prompt": "Your name",
     "message_prompt": "Your message",
-    "calculate_button": "Calculate",
-    "send_button": "Send"
+    "send_button": "Calculate",
+    "send_button_chat": "Send",
     "operation_prompt": "Choose an operation",
     "integration": "Integration",
     "differentiation": "Differentiation",
@@ -33,5 +33,14 @@
     "user_joined": "A new user has joined the chat.",
     "user_left": "A user has left the chat.",
     "about_title": "About this project",
-    "about_description": "This project was created to demonstrate translation and user interaction."
+    "about_description": "This project was created to demonstrate translation and user interaction.",
+    "error_firebase": "Firebase connection error. Please check the settings.",
+    "retry_button": "Retry",
+    "exit_button": "Exit",
+    "loading_message": "Loading...",
+    "update_successful": "Update successful!",
+    "new_message": "New message",
+    "welcome_chat": "Welcome to the chat!",
+    "typing_indicator": "Someone is typing...",
+    "disconnect_warning": "Connection lost. Check your internet connection."
 }
