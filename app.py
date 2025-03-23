@@ -134,22 +134,14 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Чат
-    st.header(f"💬 {translations['online_chat']}")
-    messages = get_messages()
-    for user, text in messages:
-        st.write(f"**{user}:** {text}")
+   # Чат
+    st.header("💬 Онлайн-чат")
+    for msg in st.session_state['chat_history']:
+        st.write(msg)
 
     # Поле для введення повідомлення
-    user_name = st.text_input(translations["name_prompt"], key="user_name")
-    user_message = st.text_input(translations["message_prompt"], key="user_message")
-    if st.button(translations["send_button"]):
-        if not user_name.strip():  # Перевірка, чи введене ім'я
-            st.warning(translations["name_warning"])
-        elif not user_message.strip():  # Перевірка, чи введене повідомлення
-            st.warning(translations["message_warning"])
-        else:
-            send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
+    st.text_input("Ваше повідомлення:", value="", key="user_message")
+    st.button("Відправити", key="send_button", on_click=send_message)
             
     # Додати інформацію про автора
     st.markdown("---")
