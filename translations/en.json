@@ -2,7 +2,7 @@
     "greeting": "Welcome",
     "name_prompt": "Your name",
     "message_prompt": "Your message",
-    "send_button": "Send",
+    "send_button": "Calculate",
     "operation_prompt": "Choose an operation",
     "theme_prompt": "Choose a theme",
     "project_by": "Project by",
@@ -12,5 +12,7 @@
     "online_count": "users online",
     "online_chat": "Online Chat",
     "input_example": "For example, x**2 - 4*x + y + z",
-    "calculation_prompt": "Enter a function for calculation:"
+    "calculation_prompt": "Enter a function for calculation:",
+    "name_warning": "Please enter your name before sending a message!",
+    "message_warning": "Message cannot be empty!"
 }
