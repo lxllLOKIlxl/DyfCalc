@@ -80,7 +80,7 @@ st.session_state['user_count'] += 1
 # Вибір мови
 with st.sidebar:
     st.header(f"🌐 {translations['interface_language']}")
-    lang_choice = st.radio(translations["select_language"], ["uk", "en"])  # Українська або Англійська
+    st.radio(translations["select_language"], ["uk", "en"])
     translations = load_language(lang_choice)  # Завантаження перекладу
 
 # Заголовок із стилем
