@@ -141,11 +141,11 @@ with st.sidebar:
 
     # Відображення повідомлень
     messages = get_messages()
-    if messages:  # Перевірка, чи є повідомлення
+    if messages:  # Якщо є повідомлення
         for user, text in messages:
             st.write(f"**{user}:** {text}")
     else:
-        st.write(translations.get("no_messages", "Немає повідомлень для відображення"))  # Відповідний текст для чату
+        st.write("Наразі немає повідомлень.")  # Коректний текст для порожнього чату
 
     # Поле для введення імені
     user_name = st.text_input(
@@ -153,20 +153,26 @@ with st.sidebar:
         key="user_name"
     )
 
-    # Поле для введення повідомлення
+    # Тимчасова змінна для роботи з введеним текстом
     user_message = st.text_input(
         translations["message_prompt"], 
-        key="user_message"
+        key="user_message",
+        value=""  # Ініціалізація поля як порожнього для кожного рендера
     )
 
-    # Кнопка для відправлення повідомлення
-    if st.button(translations["send_button_chat"]):  # Використання правильного ключа для "Відправити"
+    # Кнопка для відправки повідомлення
+    if st.button(translations["send_button_chat"]):  # Використання правильного ключа "Відправити"
         if not user_name.strip():  # Перевірка, чи введено ім'я
             st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введено повідомлення
             st.warning(translations["message_warning"])
         else:
-            send_message()  # Надсилаємо повідомлення
+            send_message()  # Виклик функції для відправки повідомлення
+            st.text_input(  # Оновлюємо поле для вводу
+                translations["message_prompt"], 
+                key="user_message",
+                value=""  # Очищення після відправки
+            )
 
     # Додати інформацію про автора
     st.markdown("---")
