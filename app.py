@@ -79,7 +79,13 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    # Виділена секція для "Мова інтерфейсу"
+    # Радіо-кнопка для вибору мови
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"], key="language_radio")  # Унікальний ключ для радіо-кнопки
+
+    # Завантажуємо переклад на основі вибраної мови
+    translations = load_language(lang_choice)
+
+    # Стилізований блок для заголовка "Мова інтерфейсу"
     st.markdown(
         f"""
         <div style="background-color: #f0f0f5; padding: 15px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px;">
@@ -88,10 +94,6 @@ with st.sidebar:
         """,
         unsafe_allow_html=True
     )
-    
-    # Радіо-кнопка для вибору мови
-    lang_choice = st.radio(translations["select_language"], ["uk", "en"], key="language_radio")  # Унікальний ключ для radio
-    translations = load_language(lang_choice)  # Завантаження перекладу після вибору мови
 
 # Заголовок із стилем
 st.markdown(f"<h1 style='text-align: center; color: blue;'>🔢 {translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
