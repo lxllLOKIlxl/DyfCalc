@@ -88,10 +88,10 @@ with st.sidebar:
     # Стилізована секція для "Мова інтерфейсу"
     st.markdown(
         f"""
-        <div style="background-color: rgba(240, 240, 240, 0.8); padding: 6px 12px; border-radius: 16px; border: 1px solid rgba(200, 200, 200, 0.6); margin-bottom: 8px; text-align: center;">
-            <h4 style="margin: 0; font-family: Arial, sans-serif;">🌍 {translations['interface_language']}</h4>
+        <div style="background-color: rgba(240, 240, 240, 0.5); padding: 6px 10px; border-radius: 14px; border: 1px solid rgba(200, 200, 200, 0.5); margin-bottom: 10px; text-align: center;">
+            <h4 style="margin: 0; color: #000; font-family: Arial, sans-serif;">🌍 {translations['interface_language']}</h4>
         </div>
-        <hr style="border: none; border-top: 1px solid #ccc; margin: 8px 0;">
+        <hr style="border: none; border-top: 1px solid rgba(180, 180, 180, 0.8); margin: 8px 0;">
         """,
         unsafe_allow_html=True
     )
