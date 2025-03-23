@@ -2,44 +2,89 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import sympy as sp
+import firebase_admin
+from firebase_admin import credentials, db
+
+# Ініціалізація Firebase з перевіркою
+if not firebase_admin._apps:
+    cred = credentials.Certificate({
+        "type": st.secrets["firebase"]["type"],
+        "project_id": st.secrets["firebase"]["project_id"],
+        "private_key_id": st.secrets["firebase"]["private_key_id"],
+        "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+        "client_email": st.secrets["firebase"]["client_email"],
+        "client_id": st.secrets["firebase"]["client_id"],
+        "auth_uri": st.secrets["firebase"]["auth_uri"],
+        "token_uri": st.secrets["firebase"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+    })
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': st.secrets["firebase"]["databaseURL"]
+    })
+
+# Функція для надсилання повідомлень
+def send_message(user, text):
+    try:
+        ref = db.reference('messages')
+        new_message = {
+            "user": user,
+            "text": text
+        }
+        ref.push(new_message)
+        st.success("Повідомлення надіслано!")
+    except Exception as e:
+        st.error(f"Помилка надсилання повідомлення: {e}")
+
+# Функція для отримання повідомлень
+def get_messages():
+    try:
+        ref = db.reference('messages')
+        messages = ref.get()
+        if messages:
+            return [(msg["user"], msg["text"]) for msg in messages.values()]
+        return []
+    except Exception as e:
+        st.error(f"Помилка отримання даних: {e}")
+        return []
 
 # Лічильник кількості користувачів онлайн
 if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
-# Історія чату (локальна пам'ять або файл)
-if 'chat_history' not in st.session_state:
-    st.session_state['chat_history'] = []
-
-# Функція для відправки повідомлення
-def send_message():
-    if "user_message" in st.session_state and st.session_state["user_message"].strip():
-        st.session_state["chat_history"].append(f"Користувач: {st.session_state['user_message'].strip()}")
-        st.session_state["user_message"] = ""
-
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Бокова панель із параметрами
+# Бокова панель із параметрами і чатом
 with st.sidebar:
     # Лічильник користувачів
-    st.header("👥 Користувачі")
-    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.header("👥 Користувачі онлайн")
+    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів)**")
     st.markdown("---")
 
     # Чат
     st.header("💬 Онлайн-чат")
-    for msg in st.session_state['chat_history']:
-        st.write(msg)
+    user = st.text_input("Ваше ім'я", key="user_name_chat")
+    message = st.text_input("Ваше повідомлення", key="user_message_chat")
+    if st.button("Відправити", key="send_button_chat"):
+        if user.strip() and message.strip():
+            send_message(user, message)
+        else:
+            st.warning("Будь ласка, заповніть усі поля!")
 
-    # Поле для введення повідомлення
-    st.text_input("Ваше повідомлення:", value="", key="user_message")
-    st.button("Відправити", key="send_button", on_click=send_message)
-
+    st.write("### Повідомлення:")
+    chat_messages = get_messages()
+    if chat_messages:
+        for user, text in chat_messages:
+            st.write(f"**{user}:** {text}")
+    else:
+        st.write("Наразі немає повідомлень.")
     st.markdown("---")
+
+    # Налаштування
     st.header("🔧 Налаштування")
     operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
     st.markdown("---")
@@ -65,35 +110,25 @@ st.markdown(
 )
 user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
 
-# Побудова графіка функції з перевіркою
+# Побудова графіка функції
 if user_function:
     try:
         x, y, z = sp.symbols('x y z')
         function = sp.sympify(user_function)
 
-        # Перевірка ділення на нуль
-        if sp.simplify(function).has(sp.zoo) or sp.simplify(function).has(sp.oo):
-            raise ValueError("Функція має нескінченні значення!")
-
-        # Підстановка значень для змінних y і z
         substitutions = {var: 1 for var in [y, z] if var in function.free_symbols}
         function = function.subs(substitutions)
 
-        # Генерація числових даних
         func_np = sp.lambdify(x, function, "numpy")
         x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
-        # Знаходження коренів функції
         roots = sp.solve(function, x)
         roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
-        # Побудова графіка
         if st.checkbox("📊 Показати графік функції"):
             fig, ax = plt.subplots(figsize=(8, 5))
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
-
-            # Додавання точок перетину
             for root in roots_np:
                 ax.scatter(root, 0, color="red", s=50, label=f"Точка перетину: {root:.2f}")
                 ax.annotate(
@@ -105,24 +140,18 @@ if user_function:
                     fontsize=10,
                     bbox=dict(boxstyle="round,pad=0.3", edgecolor="red", facecolor="lightyellow")
                 )
-
             ax.set_title("Графік функції", fontsize=16)
             ax.set_xlabel("x", fontsize=14)
             ax.set_ylabel("f(x)", fontsize=14)
             ax.legend(loc="upper left")
             ax.grid(True)
-
             st.pyplot(fig)
 
-    except ValueError as ve:
-        st.error(f"Помилка: {ve}")
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
 
-# Кнопка для обчислення
 if st.button("🔍 Обчислити"):
     try:
-        # Інтегрування або диференціювання
         if operation == "Інтегрування":
             result = sp.integrate(function, x)
             st.success(f"Інтеграл: {result}")
@@ -140,20 +169,20 @@ st.markdown(
         background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
     }
     .stButton>button {
-        background-color: #007BFF; /* Синій колір кнопки */
+        background-color: #007BFF;
         color: white;
         border: none;
-        padding: 6px 12px; /* Розмір кнопки */
+        padding: 6px 12px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 14px; /* Розмір тексту */
+        font-size: 14px;
         margin: 4px 2px;
         border-radius: 8px;
         transition-duration: 0.4s;
     }
     .stButton>button:hover {
-        background-color: #0056b3; /* Темніше синій при наведенні */
+        background-color: #0056b3;
         color: white;
     }
     </style>
