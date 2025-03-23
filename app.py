@@ -111,22 +111,38 @@ with st.sidebar:
     theme = st.radio(translations["theme_prompt"], ["Світла", "Темна"])
     st.markdown("---")
 
-    # Чат
-    st.header(f"💬 {translations['online_chat']}")
-    messages = get_messages()
+# Чат
+st.header(f"💬 {translations['online_chat']}")
+
+# Відображення повідомлень
+messages = get_messages()
+if messages:
     for user, text in messages:
         st.write(f"**{user}:** {text}")
+else:
+    st.write("Наразі немає повідомлень.")
 
-    # Поле для введення повідомлення
-    user_name = st.text_input(translations["name_prompt"], key="user_name")
-    user_message = st.text_input(translations["message_prompt"], key="user_message")
-    if st.button(translations["send_button_chat"]):  # Виправлено текст кнопки
-        if not user_name.strip():  # Перевірка, чи введене ім'я
-            st.warning(translations["name_warning"])
-        elif not user_message.strip():  # Перевірка, чи введене повідомлення
-            st.warning(translations["message_warning"])
-        else:
-            send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
+# Поле для введення повідомлення
+user_name = st.text_input(translations["name_prompt"], key="user_name")
+if "temp_user_message" not in st.session_state:
+    st.session_state["temp_user_message"] = ""  # Ініціалізуємо тимчасове значення
+
+user_message = st.text_input(
+    translations["message_prompt"],
+    value=st.session_state["temp_user_message"],
+    key="temp_user_message"
+)
+
+# Кнопка для відправки повідомлення
+if st.button(translations["send_button_chat"]):  # Використовується правильний ключ для кнопки "Відправити"
+    if not user_name.strip():  # Перевірка, чи введено ім'я
+        st.warning(translations["name_warning"])
+    elif not user_message.strip():  # Перевірка, чи введено повідомлення
+        st.warning(translations["message_warning"])
+    else:
+        send_message()  # Надсилаємо повідомлення
+        st.session_state["temp_user_message"] = ""  # Очищуємо тимчасове значення
+
 
     # Додати інформацію про автора
     st.markdown("---")
