@@ -44,5 +44,5 @@
     "typing_indicator": "Хтось друкує...",
     "disconnect_warning": "З'єднання втрачено. Перевірте підключення до інтернету.",
     "integral_result": "Інтеграл",
-    "diff_result": "Результат диференціювання"
+    "derivative_result": "Похідна"
 }
