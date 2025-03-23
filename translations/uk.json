@@ -5,5 +5,12 @@
     "send_button": "Відправити",
     "operation_prompt": "Оберіть операцію",
     "theme_prompt": "Оберіть тему",
-    "project_by": "Проєкт виконав"
+    "project_by": "Проєкт виконав",
+    "interface_language": "Мова інтерфейсу",
+    "select_language": "Оберіть мову:",
+    "online_users": "Користувачі",
+    "online_count": "користувач(і/ів) онлайн",
+    "online_chat": "Онлайн-чат",
+    "input_example": "Наприклад, x**2 - 4*x + y + z",
+    "calculation_prompt": "Введіть функцію для обчислення:"
 }
