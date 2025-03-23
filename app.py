@@ -100,6 +100,18 @@ with st.sidebar:
     st.text_input("Ваше повідомлення:", key="user_message")
     st.button("Відправити", on_click=send_message)
 
+    # Додати інформацію про автора
+    st.markdown("---")
+    st.markdown(
+        """
+        <div style="text-align: center; color: gray;">
+        Проєкт виконав:<br>
+        <b>Студент 1 курсу ІПЗ-24-1-if</b><br>
+        <b>Шаблінський С.І.</b>
+        </div>
+        """, unsafe_allow_html=True
+    )
+
 # Введення функції
 st.markdown(
     """
