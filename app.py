@@ -145,31 +145,30 @@ with st.sidebar:
         for user, text in messages:
             st.write(f"**{user}:** {text}")
     else:
-        st.write(translations.get("no_results", "No messages found."))  # Відображення, якщо немає повідомлень
+        st.write(translations.get("no_results", "No messages found."))
 
     # Поле для введення імені
     user_name = st.text_input(translations["name_prompt"], key="user_name")
 
-    # Перевірка, чи існує "user_message" у session_state
-    if "user_message" not in st.session_state:
-        st.session_state["user_message"] = ""
-
     # Поле для введення повідомлення
+    if "temp_user_message" not in st.session_state:
+        st.session_state["temp_user_message"] = ""
+
     user_message = st.text_input(
-        translations["message_prompt"], 
-        value=st.session_state["user_message"],  # Уникаємо конфлікту
-        key="user_message"
+        translations["message_prompt"],
+        value=st.session_state["temp_user_message"],  # Значення із тимчасового стану
+        key="temp_user_message"
     )
 
     # Кнопка для відправки повідомлення
-    if st.button(translations["send_button_chat"]):  # Використовуємо правильний ключ "send_button_chat"
+    if st.button(translations["send_button_chat"]):  # Використовуємо правильний ключ для кнопки "Відправити"
         if not user_name.strip():  # Перевірка, чи введено ім'я
             st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введено повідомлення
             st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення
-            st.session_state["user_message"] = ""  # Очищуємо поле після відправлення
+            st.session_state["temp_user_message"] = ""  # Очищення тимчасового стану після відправлення
 
     # Додати інформацію про автора
     st.markdown("---")
