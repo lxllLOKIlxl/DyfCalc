@@ -5,6 +5,8 @@ import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
 import json
+import threading  # Для роботи з потоками
+import time
 
 # Функція для завантаження перекладів
 def load_translations(lang):
@@ -42,7 +44,8 @@ def send_message(user, text):
         ref = db.reference('messages')
         new_message = {
             "user": user,
-            "text": text
+            "text": text,
+            "timestamp": int(time.time())  # Додаємо часову мітку для очищення
         }
         ref.push(new_message)
         st.success(translations["update_successful"])
@@ -60,6 +63,30 @@ def get_messages():
     except Exception as e:
         st.error(translations["error_generic"])
         return []
+
+# Функція для автоматичного очищення чату
+def auto_clear_chat():
+    while True:
+        try:
+            current_time = int(time.time())
+            cutoff_time = current_time - 50  # Повідомлення старше 50 секунд будуть видалені
+            ref = db.reference('messages')
+
+            # Видалення повідомлень старше 50 секунд
+            old_messages = ref.order_by_child('timestamp').end_at(cutoff_time).get()
+            if old_messages:
+                for key in old_messages:
+                    ref.child(key).delete()
+
+            time.sleep(50)  # Зачекати 50 секунд до наступного очищення
+        except Exception as e:
+            st.error(f"Помилка очищення чату: {e}")
+            break
+
+# Запуск автоматичного очищення чату
+if not st.session_state.get("auto_clear_initialized", False):
+    threading.Thread(target=auto_clear_chat, daemon=True).start()
+    st.session_state["auto_clear_initialized"] = True
 
 # Вибір мови
 with st.sidebar:
