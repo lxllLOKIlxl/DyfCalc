@@ -13,6 +13,7 @@
     "online_chat": "Online Chat",
     "input_example": "For example, x**2 - 4*x + y + z",
     "calculation_prompt": "Enter a function for calculation:",
+    "plot_function": "Show function graph",
     "name_warning": "Please enter your name before sending a message!",
     "message_warning": "Message cannot be empty!"
 }
