@@ -2,7 +2,7 @@
     "greeting": "Welcome",
     "name_prompt": "Your name",
     "message_prompt": "Your message",
-    "send_button": "Calculate",
+    "calculate_button": "Calculate",
     "send_button_chat": "Send",
     "operation_prompt": "Choose an operation",
     "integration": "Integration",
