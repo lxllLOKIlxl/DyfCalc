@@ -84,7 +84,7 @@ with st.sidebar:
     translations = load_language(lang_choice)  # Завантаження перекладу після вибору мови
     
     # Використовуємо локалізований текст для заголовків
-    st.header(f"🌐 {translations['interface_language']}")
+    st.header(f" {translations['interface_language']}")
     st.radio(translations["select_language"], ["uk", "en"])  # Тепер "Оберіть мову" також локалізовано
 
 # Заголовок із стилем
