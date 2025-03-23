@@ -134,7 +134,7 @@ with st.sidebar:
 
     st.markdown("---")
 
-# Чат у боковій панелі
+    # Чат у боковій панелі
 with st.sidebar:
     # Заголовок чату
     st.header(f"💬 {translations['online_chat']}")
@@ -145,10 +145,13 @@ with st.sidebar:
         for user, text in messages:
             st.write(f"**{user}:** {text}")
     else:
-        st.write(translations.get("no_results", "No messages found."))
+        st.write(translations.get("no_results", "No messages found."))  # Якщо повідомлень немає
 
     # Поле для введення імені
-    user_name = st.text_input(translations["name_prompt"], key="user_name")
+    user_name = st.text_input(
+        translations["name_prompt"], 
+        key="user_name"
+    )
 
     # Поле для введення повідомлення
     user_message = st.text_input(
@@ -156,16 +159,17 @@ with st.sidebar:
         key="user_message"
     )
 
-    # Кнопка для відправки повідомлення
-    if st.button(translations["send_button_chat"]):  # Ключ для кнопки "Відправити"
+    # Кнопка для відправлення повідомлення
+    if st.button(translations["send_button_chat"]):  # Використання правильного ключа для "Відправити"
         if not user_name.strip():  # Перевірка, чи введено ім'я
             st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введено повідомлення
             st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення
-            # Видалення тексту після відправлення через власну змінну
-            st.experimental_rerun()  # Оновлюємо інтерфейс, щоб очистити поле
+
+            # Очищення полів після надсилання
+            st.session_state["user_message"] = ""  # Очищаємо поле для повідомлень
 
     # Додати інформацію про автора
     st.markdown("---")
