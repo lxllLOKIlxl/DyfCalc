@@ -79,9 +79,12 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    st.header(f"🌐 {translations['interface_language']}")  # Локалізований заголовок
-    lang_choice = st.radio(translations["select_language"], ["uk", "en"])  # Локалізований текст "Оберіть мову"
-    translations = load_language(lang_choice)  # Завантаження перекладу
+    st.header("🌐 Мова інтерфейсу")  # Статичний заголовок для початкового завантаження
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"])  # Українська або Англійська
+    translations = load_language(lang_choice)  # Завантаження перекладу після вибору мови
+
+# Далі текст перекладатиметься, використовуючи змінну `translations`
+st.header(f"🌐 {translations['interface_language']}")  # Локалізований заголовок
 
 # Заголовок із стилем
 st.markdown(f"<h1 style='text-align: center; color: blue;'>🔢 {translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
