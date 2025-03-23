@@ -43,6 +43,6 @@
     "welcome_chat": "Welcome to the chat!",
     "typing_indicator": "Someone is typing...",
     "disconnect_warning": "Connection lost. Check your internet connection.",
-    "integral_result": "Integral"
+    "integral_result": "Integral",
     "diff_result": "Differentiation Result"
 }
