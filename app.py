@@ -95,13 +95,13 @@ with st.sidebar:
 
 # Заголовок програми
 st.markdown(
-    """
+    f"""
     <div style='background-color: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;'>
         <h1 style='text-align: center; color: blue; font-family: Arial, sans-serif; font-weight: bold;'>
-            Вітаємо DyfCalc
+            {translations.get('greeting_dyfcalc', 'Вітаємо DyfCalc')}
         </h1>
         <h3 style='text-align: center; color: gray; font-family: Arial, sans-serif;'>
-            Введіть функцію для обчислення:
+            {translations.get('calculation_prompt_dyfcalc', 'Введіть функцію для обчислення')}
         </h3>
     </div>
     """,
