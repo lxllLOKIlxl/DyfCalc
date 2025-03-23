@@ -2,8 +2,8 @@
     "greeting": "Вітаємо",
     "name_prompt": "Ваше ім'я",
     "message_prompt": "Ваше повідомлення",
-    "calculate_button": "Обчислити",
-    "send_button": "Відправити"
+    "send_button": "Обчислити",
+    "send_button_chat": "Відправити",
     "operation_prompt": "Оберіть операцію",
     "integration": "Інтегрування",
     "differentiation": "Диференціювання",
@@ -33,5 +33,14 @@
     "user_joined": "Новий користувач приєднався до чату.",
     "user_left": "Користувач залишив чат.",
     "about_title": "Про цей проєкт",
-    "about_description": "Цей проєкт створено для демонстрації перекладу і взаємодії користувачів."
+    "about_description": "Цей проєкт створено для демонстрації перекладу і взаємодії користувачів.",
+    "error_firebase": "Помилка підключення до Firebase. Перевірте налаштування.",
+    "retry_button": "Спробувати ще раз",
+    "exit_button": "Вихід",
+    "loading_message": "Завантаження...",
+    "update_successful": "Оновлення успішне!",
+    "new_message": "Нове повідомлення",
+    "welcome_chat": "Ласкаво просимо до чату!",
+    "typing_indicator": "Хтось друкує...",
+    "disconnect_warning": "З'єднання втрачено. Перевірте підключення до інтернету."
 }
