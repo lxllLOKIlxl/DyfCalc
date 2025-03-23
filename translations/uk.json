@@ -45,5 +45,8 @@
     "disconnect_warning": "З'єднання втрачено. Перевірте підключення до інтернету.",
     "integral_result": "Інтеграл",
     "derivative_result": "Похідна",
-    "calculation_prompt": "Програма для інтегрування і диференціювання функцій"
+    "calculation_prompt": "Програма для інтегрування і диференціювання функцій",
+    "greeting_dyfcalc": "Вітаємо DyfCalc",
+    "calculation_prompt_dyfcalc": "Програма для інтегрування і диференціювання функцій"
+
 }
