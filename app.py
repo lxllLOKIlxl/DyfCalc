@@ -93,9 +93,20 @@ with st.sidebar:
     lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
     translations = load_translations(lang)
 
-# Заголовок
-st.markdown(f"<h1 style='text-align: center; color: blue;'>{translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
-st.markdown(f"<h3 style='text-align: center; color: gray;'>{translations['calculation_prompt']}</h3>", unsafe_allow_html=True)
+# Заголовок програми
+st.markdown(
+    """
+    <div style='background-color: #f0f8ff; padding: 15px; border-radius: 10px;'>
+        <h1 style='text-align: center; color: #2a9df4; font-family: Arial, sans-serif; font-weight: bold;'>
+            Програма для інтегрування і диференціювання
+        </h1>
+        <h3 style='text-align: center; color: #555; font-family: Arial, sans-serif; margin-top: 5px;'>
+            Введіть вашу функцію нижче, щоб отримати результат
+        </h3>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.markdown("---")
 
 # Бокова панель із параметрами та чатом
