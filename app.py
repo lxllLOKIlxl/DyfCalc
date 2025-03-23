@@ -79,20 +79,20 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    st.header(f"🌐 {translations['interface_language']}")
-    st.radio(translations["select_language"], ["uk", "en"])
+    st.header("🌐 Мова інтерфейсу")
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"])  # Українська або Англійська
     translations = load_language(lang_choice)  # Завантаження перекладу
 
 # Заголовок із стилем
 st.markdown(f"<h1 style='text-align: center; color: blue;'>🔢 {translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='text-align: center; color: gray;'>{translations['calculation_prompt']}</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
     # Лічильник користувачів
-    st.header("👥 Користувачі")
-    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів) онлайн**")
+    st.header(f"👥 {translations['online_users']}")
+    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} {translations['online_count']}**")
     st.markdown("---")
 
     # Налаштування
@@ -102,7 +102,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Чат
-    st.header("💬 Онлайн-чат")
+    st.header(f"💬 {translations['online_chat']}")
     messages = get_messages()
     for user, text in messages:
         st.write(f"**{user}:** {text}")
@@ -123,16 +123,12 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="text-align: center; color: gray;">
-        {translations["project_by"]}<br>
+        {translations['project_by']}<br>
         <b>Студент 1 курсу ІПЗ-24-1-if</b><br>
         <b>Шаблінський С.І.</b>
         </div>
         """, unsafe_allow_html=True
     )
-
-# Основний функціонал програми залишається без змін:
-# Додавайте функцію побудови графіків та інтегралів/похідних у відповідному місці.
-
 
 # Введення функції
 st.markdown(
