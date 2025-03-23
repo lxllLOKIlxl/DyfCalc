@@ -1,0 +1,6 @@
+{
+    "greeting": "Welcome",
+    "name_prompt": "Your name",
+    "message_prompt": "Your message",
+    "send_button": "Send"
+}
