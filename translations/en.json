@@ -5,7 +5,7 @@
     "calculate_button": "Calculate",
     "send_button_chat": "Send",
     "operation_prompt": "Choose an operation",
-    "integral_result": "Integral",
+    "integration": "Integration",
     "differentiation": "Differentiation",
     "theme_prompt": "Choose a theme",
     "theme_light": "Light Theme",
