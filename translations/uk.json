@@ -3,5 +3,6 @@
     "name_prompt": "Ваше ім'я",
     "message_prompt": "Ваше повідомлення",
     "send_button": "Відправити",
-    "operation_prompt": "Оберіть операцію"
+    "operation_prompt": "Оберіть операцію",
+    "theme_prompt": "Оберіть тему"
 }
