@@ -4,6 +4,16 @@ import streamlit as st
 import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
+import json
+
+# Функція для завантаження перекладів
+def load_translations(lang):
+    try:
+        with open(f"{lang}.json", "r", encoding="utf-8") as file:
+            return json.load(file)
+    except Exception as e:
+        st.error(f"Помилка завантаження перекладу: {e}")
+        return {}
 
 # Ініціалізація Firebase з перевіркою
 if not firebase_admin._apps:
@@ -32,9 +42,9 @@ def send_message(user, text):
             "text": text
         }
         ref.push(new_message)
-        st.success("Повідомлення надіслано!")
+        st.success(translations["update_successful"])
     except Exception as e:
-        st.error(f"Помилка надсилання повідомлення: {e}")
+        st.error(f"{translations['error_firebase']}: {e}")
 
 # Функція для отримання повідомлень
 def get_messages():
@@ -45,75 +55,65 @@ def get_messages():
             return [(msg["user"], msg["text"]) for msg in messages.values()]
         return []
     except Exception as e:
-        st.error(f"Помилка отримання даних: {e}")
+        st.error(translations["error_generic"])
         return []
-
-# Лічильник кількості користувачів онлайн
-if 'user_count' not in st.session_state:
-    st.session_state['user_count'] = 1
-st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
     lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
     translations = load_translations(lang)
 
-# Заголовок із стилем
-st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
+# Заголовок
+st.markdown(f"<h1 style='text-align: center; color: blue;'>{translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='text-align: center; color: gray;'>{translations['calculation_prompt']}</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
-# Бокова панель із параметрами і чатом
+# Бокова панель із параметрами та чатом
 with st.sidebar:
-    # Лічильник користувачів
-    st.header("👥 Користувачі онлайн")
-    st.markdown(f"![Людина](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state['user_count']} користувач(і/ів)**")
+    st.header(f"{translations['online_users']}")
+    st.markdown(f"![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state.get('user_count', 1)} {translations['online_count']}**")
     st.markdown("---")
 
-    # Чат
-    st.header("💬 Онлайн-чат")
-    user = st.text_input("Ваше ім'я", key="user_name_chat")
-    message = st.text_input("Ваше повідомлення", key="user_message_chat")
-    if st.button("Відправити", key="send_button_chat"):
+    st.header(translations["online_chat"])
+    user = st.text_input(translations["name_prompt"], key="chat_user_name")
+    message = st.text_input(translations["message_prompt"], key="chat_user_message")
+    if st.button(translations["send_button_chat"], key="chat_send_button"):
         if user.strip() and message.strip():
             send_message(user, message)
         else:
-            st.warning("Будь ласка, заповніть усі поля!")
+            st.warning(translations["message_warning"])
 
-    st.write("### Повідомлення:")
+    st.write(f"### {translations['welcome_chat']}")
     chat_messages = get_messages()
     if chat_messages:
         for user, text in chat_messages:
             st.write(f"**{user}:** {text}")
     else:
-        st.write("Наразі немає повідомлень.")
+        st.write(translations["no_results"])
     st.markdown("---")
 
-    # Налаштування
-    st.header("🔧 Налаштування")
-    operation = st.radio("Оберіть операцію:", ["Інтегрування", "Диференціювання"])
+    st.header(translations["settings_title"])
+    operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]])
     st.markdown("---")
-    st.header("🎨 Оформлення")
-    theme = st.radio("Оберіть тему:", ["Світла", "Темна"])
+    st.header(translations["theme_prompt"])
+    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]])
     st.markdown("---")
     st.markdown(
-        """
+        f"""
         <div style="text-align: center; color: gray;">
-        Програма ver 1.0 • Запатентовано розробником Sm
+        {translations['project_by']}<br>
+        Програма ver 1.0
         </div>
-        """, unsafe_allow_html=True
+        """,
+        unsafe_allow_html=True
     )
 
-# Введення функції
+# Основна функціональність калькулятора
 st.markdown(
-    """
-    <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-    <h4>🧮 Введіть функцію для обчислення:</h4>
-    </div>
-    """,
+    f"<h4>{translations['calculation_prompt']}</h4>",
     unsafe_allow_html=True
 )
-user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
+user_function = st.text_input(translations["input_example"], placeholder=translations["input_example"])
 
 # Побудова графіка функції з перевіркою
 if user_function:
@@ -131,7 +131,7 @@ if user_function:
         roots = sp.solve(function, x)
         roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
-        if st.checkbox("📊 Показати графік функції"):
+        if st.checkbox(translations["plot_function"]):
             fig, ax = plt.subplots(figsize=(8, 5))
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
             for root in roots_np:
@@ -155,17 +155,16 @@ if user_function:
     except Exception as e:
         st.error(f"Сталася помилка: {e}")
 
-# Кнопка для обчислення
-if st.button("🔍 Обчислити"):
+if st.button(translations["calculate_button"]):
     try:
-        if operation == "Інтегрування":
+        if operation == translations["integration"]:
             result = sp.integrate(function, x)
-            st.success(f"Інтеграл: {result}")
-        elif operation == "Диференціювання":
+            st.success(f"{translations['integral_result']}: {result}")
+        elif operation == translations["differentiation"]:
             result = sp.diff(function, x)
-            st.success(f"Похідна: {result}")
+            st.success(f"{translations['derivative_result']}: {result}")
     except Exception as e:
-        st.error(f"Сталася помилка обчислення: {e}")
+        st.error(f"{translations['error_generic']}: {e}")
 
 # Додатковий стиль
 st.markdown(
