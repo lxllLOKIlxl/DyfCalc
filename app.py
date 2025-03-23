@@ -132,9 +132,9 @@ with st.sidebar:
 
 # Введення функції
 st.markdown(
-    """
+    f"""
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-    <h4>🧮 Введіть функцію для обчислення:</h4>
+    <h4>🧮 {translations['calculation_prompt']}</h4>
     </div>
     """,
     unsafe_allow_html=True
