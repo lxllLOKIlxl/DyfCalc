@@ -79,10 +79,7 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    # Радіо-кнопка для вибору мови без заголовка
     lang_choice = st.radio("", ["uk", "en"], key="language_radio")  # Тільки кнопки
-
-    # Завантаження перекладу після вибору мови
     translations = load_language(lang_choice)
 
     # Стилізована секція для "Мова інтерфейсу"
@@ -123,7 +120,7 @@ with st.sidebar:
     # Поле для введення повідомлення
     user_name = st.text_input(translations["name_prompt"], key="user_name")
     user_message = st.text_input(translations["message_prompt"], key="user_message")
-    if st.button(translations["send_button"]):
+    if st.button(translations["send_button_chat"]):  # Виправлено текст кнопки
         if not user_name.strip():  # Перевірка, чи введене ім'я
             st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введене повідомлення
