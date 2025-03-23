@@ -79,15 +79,12 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    # Дефолтна мова завантажується перед рендерингом
-    translations = load_language("uk")  # Початково встановлюється українська
-    
-    # Радіо-кнопка для вибору мови
-    lang_choice = st.radio(translations["select_language"], ["uk", "en"], key="language_radio")  # Локалізований текст
-    
-    # Завантаження перекладу після зміни мови
-    translations = load_language(lang_choice)
+    # Радіо-кнопка для вибору мови без заголовка
+    lang_choice = st.radio("", ["uk", "en"], key="language_radio")  # Залишаємо тільки кнопки
 
+    # Завантаження перекладу після вибору мови
+    translations = load_language(lang_choice)
+    
     # Стилізований блок для заголовка "Мова інтерфейсу"
     st.markdown(
         f"""
