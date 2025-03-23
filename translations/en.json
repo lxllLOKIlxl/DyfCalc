@@ -15,5 +15,20 @@
     "calculation_prompt": "Enter a function for calculation:",
     "plot_function": "Show function graph",
     "name_warning": "Please enter your name before sending a message!",
-    "message_warning": "Message cannot be empty!"
+    "message_warning": "Message cannot be empty!",
+    "error_generic": "An error occurred. Please try again later.",
+    "error_invalid_input": "Invalid input. Please check your data and try again.",
+    "no_results": "No results found.",
+    "settings_title": "Settings",
+    "settings_description": "Customize your experience.",
+    "theme_light": "Light Theme",
+    "theme_dark": "Dark Theme",
+    "theme_system": "Follow system settings",
+    "edit_message": "Edit",
+    "delete_message": "Delete",
+    "confirm_delete": "Are you sure you want to delete this message?",
+    "user_joined": "A new user has joined the chat.",
+    "user_left": "A user has left the chat.",
+    "about_title": "About this project",
+    "about_description": "This project was created to demonstrate translation and user interaction."
 }
