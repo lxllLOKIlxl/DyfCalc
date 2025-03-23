@@ -134,29 +134,40 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Чат
-st.header(f"💬 {translations['online_chat']}")  # Заголовок чату
+    # Бокова панель із чатом
+with st.sidebar:
+    # Заголовок для чату
+    st.header(f"💬 {translations['online_chat']}")
 
-# Відображення повідомлень
-messages = get_messages()
-for user, text in messages:
-    st.write(f"**{user}:** {text}")
+    # Відображення повідомлень
+    messages = get_messages()
+    for user, text in messages:
+        st.write(f"**{user}:** {text}")
 
-# Поле для введення імені
-user_name = st.text_input(
-    translations["name_prompt"], 
-    key="user_name"
-)
+    # Поле для введення імені та повідомлення
+    user_name = st.text_input(
+        translations["name_prompt"], 
+        key="user_name"
+    )
 
-# Поле для введення повідомлення
-if "user_message" not in st.session_state:
-    st.session_state["user_message"] = ""  # Ініціалізуємо значення у session_state
+    if "user_message" not in st.session_state:
+        st.session_state["user_message"] = ""  # Ініціалізація user_message у session_state
 
-user_message = st.text_input(
-    translations["message_prompt"], 
-    value=st.session_state["user_message"],  # Ініціалізація значення з session_state
-    key="user_message"
-)
+    user_message = st.text_input(
+        translations["message_prompt"], 
+        value=st.session_state["user_message"],  # Значення з session_state
+        key="user_message"
+    )
+
+    # Кнопка для відправки повідомлення
+    if st.button(translations["send_button_chat"]):  # Використовується ключ для кнопки "Відправити"
+        if not user_name.strip():  # Перевірка, чи введено ім'я
+            st.warning(translations["name_warning"])
+        elif not user_message.strip():  # Перевірка, чи введено повідомлення
+            st.warning(translations["message_warning"])
+        else:
+            send_message()  # Надсилаємо повідомлення
+            st.session_state["user_message"] = ""  # Очищення поля після відправлення
 
 # Кнопка для відправки повідомлення
 if st.button(translations["send_button_chat"]):  # Використовуємо ключ для "Відправити"
