@@ -12,7 +12,7 @@ def load_language(lang):
     with open(f"translations/{lang}.json", "r", encoding="utf-8") as file:
         return json.load(file)
 
-# Ініціалізація Firebase з перевіркою
+# Ініціалізація Firebase
 if not firebase_admin._apps:
     cred = credentials.Certificate({
         "type": st.secrets["firebase"]["type"],
@@ -30,13 +30,14 @@ if not firebase_admin._apps:
         'databaseURL': st.secrets["firebase"]["databaseURL"]
     })
 
-# Функція для відправки повідомлення в Firebase
+# Функція для відправки повідомлення
 def send_message():
     try:
-        user = st.session_state["user_name"]
-        text = st.session_state["user_message"]
-        if not user.strip() or not text.strip():
-            return  # Якщо поле порожнє, повідомлення не надсилається
+        user = st.session_state.get("user_name", "").strip()
+        text = st.session_state.get("user_message", "").strip()
+        if not user or not text:
+            st.warning("Будь ласка, введіть ім'я та повідомлення!")
+            return
 
         ref = db.reference('messages')
         new_message = {
@@ -50,7 +51,7 @@ def send_message():
     except Exception as e:
         st.error(f"Помилка надсилання повідомлення: {e}")
 
-# Функція для отримання повідомлень із Firebase
+# Функція для отримання повідомлень
 def get_messages():
     try:
         current_time = int(time.time())
