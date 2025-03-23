@@ -111,28 +111,28 @@ with st.sidebar:
             <p style="margin: 0; font-size: 16px; color: #000; font-weight: bold;">👤 {st.session_state['user_count']} {translations['online_count']}</p>
         </div>
         <hr style="border: none; border-top: 1px solid rgba(180, 180, 180, 0.8); margin: 8px 0;">
-        """
-        , unsafe_allow_html=True
+        """,
+        unsafe_allow_html=True
     )
 
     # Налаштування
-st.header(f"🔧 {translations['settings_title']}")  # Динамічний заголовок
+    st.header(f"🔧 {translations['settings_title']}")  # Динамічний заголовок
 
-# Динамічні радіо-кнопки для операцій
-operation = st.radio(
-    translations["operation_prompt"], 
-    [translations["integration"], translations["differentiation"]],  # Локалізовані значення
-    key="operation_radio"
-)
+    # Динамічні радіо-кнопки для операцій
+    operation = st.radio(
+        translations["operation_prompt"], 
+        [translations["integration"], translations["differentiation"]],  # Локалізовані значення
+        key="operation_radio"
+    )
 
-# Динамічні радіо-кнопки для теми
-theme = st.radio(
-    translations["theme_prompt"], 
-    [translations["theme_light"], translations["theme_dark"]],  # Локалізовані значення
-    key="theme_radio"
-)
+    # Динамічні радіо-кнопки для теми
+    theme = st.radio(
+        translations["theme_prompt"], 
+        [translations["theme_light"], translations["theme_dark"]],  # Локалізовані значення
+        key="theme_radio"
+    )
 
-st.markdown("---")
+    st.markdown("---")
 
     # Чат
     st.header(f"💬 {translations['online_chat']}")
