@@ -88,7 +88,7 @@ with st.sidebar:
     # Стилізована секція для "Мова інтерфейсу"
     st.markdown(
         f"""
-        <div style="background-color: #f9f9f9; padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; margin-bottom: 8px; text-align: center;">
+        <div style="background-color: rgba(240, 240, 240, 0.8); padding: 6px 12px; border-radius: 16px; border: 1px solid rgba(200, 200, 200, 0.6); margin-bottom: 8px; text-align: center;">
             <h4 style="margin: 0; font-family: Arial, sans-serif;">🌍 {translations['interface_language']}</h4>
         </div>
         <hr style="border: none; border-top: 1px solid #ccc; margin: 8px 0;">
