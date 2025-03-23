@@ -96,16 +96,15 @@ with st.sidebar:
         st.write(f"**{user}:** {text}")
 
     # Поле для введення повідомлення
-user_name = st.text_input("Ваше ім'я:", key="user_name")
-user_message = st.text_input("Ваше повідомлення:", key="user_message")
-
-if st.button("Відправити"):
-    if not user_name.strip():  # Перевірка, чи введене ім'я
-        st.warning("Будь ласка, введіть ваше ім'я перед відправленням повідомлення!")
-    elif not user_message.strip():  # Перевірка, чи введене повідомлення
-        st.warning("Повідомлення не може бути порожнім!")
-    else:
-        send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
+    user_name = st.text_input("Ваше ім'я:", key="user_name")
+    user_message = st.text_input("Ваше повідомлення:", key="user_message")
+    if st.button("Відправити"):
+        if not user_name.strip():  # Перевірка, чи введене ім'я
+            st.warning("Будь ласка, введіть ваше ім'я перед відправленням повідомлення!")
+        elif not user_message.strip():  # Перевірка, чи введене повідомлення
+            st.warning("Повідомлення не може бути порожнім!")
+        else:
+            send_message()  # Надсилаємо повідомлення, якщо введене ім'я і текст
 
     # Додати інформацію про автора
     st.markdown("---")
