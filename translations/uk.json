@@ -2,7 +2,7 @@
     "greeting": "Вітаємо",
     "name_prompt": "Ваше ім'я",
     "message_prompt": "Ваше повідомлення",
-    "send_button": "Обчислити",
+    "calculate_button": "Обчислити",
     "send_button_chat": "Відправити",
     "operation_prompt": "Оберіть операцію",
     "integration": "Інтегрування",
