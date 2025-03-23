@@ -53,6 +53,11 @@ if 'user_count' not in st.session_state:
     st.session_state['user_count'] = 1
 st.session_state['user_count'] += 1
 
+# Вибір мови
+with st.sidebar:
+    lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
+    translations = load_translations(lang)
+
 # Заголовок із стилем
 st.markdown("<h1 style='text-align: center; color: blue;'>🔢 DyfCalc</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: gray;'>Інтегрування та Диференціювання Функцій</h3>", unsafe_allow_html=True)
