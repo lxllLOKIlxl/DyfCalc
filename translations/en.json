@@ -3,5 +3,6 @@
     "name_prompt": "Your name",
     "message_prompt": "Your message",
     "send_button": "Send",
-    "operation_prompt": "Choose an operation"
+    "operation_prompt": "Choose an operation",
+    "theme_prompt": "Choose a theme"
 }
