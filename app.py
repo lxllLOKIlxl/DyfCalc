@@ -9,10 +9,13 @@ import json
 # Функція для завантаження перекладів
 def load_translations(lang):
     try:
-        with open(f"{lang}.json", "r", encoding="utf-8") as file:
+        with open(f"translations/{lang}.json", "r", encoding="utf-8") as file:
             return json.load(file)
+    except FileNotFoundError:
+        st.error(f"Помилка завантаження перекладу: файл '{lang}.json' не знайдено в директорії 'translations'.")
+        return {}
     except Exception as e:
-        st.error(f"Помилка завантаження перекладу: {e}")
+        st.error(f"Сталася помилка під час завантаження перекладу: {e}")
         return {}
 
 # Ініціалізація Firebase з перевіркою
