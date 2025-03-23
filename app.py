@@ -79,11 +79,13 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    # Радіо-кнопка для вибору мови
-    lang_choice = st.radio(translations["select_language"], ["uk", "en"], key="language_radio")  # Локалізований текст
-    translations = load_language(lang_choice)  # Завантаження перекладу після вибору мови
-    
-    # Заголовок "Мова інтерфейсу", який залежить від вибору мови
+    # Статичний текст для радіо-кнопок до завантаження перекладів
+    lang_choice = st.radio("Оберіть мову:", ["uk", "en"], key="language_radio")  # Радіо-кнопка для вибору мови
+
+    # Завантаження перекладу після вибору мови
+    translations = load_language(lang_choice)
+
+    # Оновлений текст для радіо-кнопок після вибору мови
     st.markdown(
         f"""
         <div style="background-color: #f0f0f5; padding: 15px; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px;">
