@@ -44,5 +44,6 @@
     "typing_indicator": "Someone is typing...",
     "disconnect_warning": "Connection lost. Check your internet connection.",
     "integral_result": "Integral",
-    "derivative_result": "Derivative"
+    "derivative_result": "Derivative",
+    "calculation_prompt": "Program for integration and differentiation of functions"
 }
