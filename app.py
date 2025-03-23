@@ -153,22 +153,22 @@ with st.sidebar:
         key="user_name"
     )
 
-    # Поле для введення повідомлення
-    user_message = st.text_input(
+    # Окрема змінна для обробки тексту повідомлення
+    temp_message = st.text_input(
         translations["message_prompt"], 
-        key="user_message",
-        value=""  # Ініціалізуємо поле порожнім при кожному рендері
+        key="user_message"
     )
 
     # Кнопка для відправлення повідомлення
     if st.button(translations["send_button_chat"]):  # Використання правильного ключа для "Відправити"
         if not user_name.strip():  # Перевірка, чи введено ім'я
             st.warning(translations["name_warning"])
-        elif not user_message.strip():  # Перевірка, чи введено повідомлення
+        elif not temp_message.strip():  # Перевірка, чи введено повідомлення
             st.warning(translations["message_warning"])
         else:
-            send_message()  # Надсилаємо повідомлення
-            # Очищення `st.session_state["user_message"]` НЕ потрібне, бо поле вже очищається через `value=""` під час наступного рендеру
+            # Надсилаємо повідомлення до бази даних
+            st.session_state["user_message"] = ""  # Очищення вмісту поля через тимчасову змінну
+            send_message()
 
     # Додати інформацію про автора
     st.markdown("---")
