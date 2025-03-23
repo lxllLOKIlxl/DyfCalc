@@ -134,7 +134,7 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Чат у боковій панелі
+# Чат у боковій панелі
 with st.sidebar:
     # Заголовок чату
     st.header(f"💬 {translations['online_chat']}")
@@ -151,24 +151,21 @@ with st.sidebar:
     user_name = st.text_input(translations["name_prompt"], key="user_name")
 
     # Поле для введення повідомлення
-    if "temp_user_message" not in st.session_state:
-        st.session_state["temp_user_message"] = ""
-
     user_message = st.text_input(
-        translations["message_prompt"],
-        value=st.session_state["temp_user_message"],  # Значення із тимчасового стану
-        key="temp_user_message"
+        translations["message_prompt"], 
+        key="user_message"
     )
 
     # Кнопка для відправки повідомлення
-    if st.button(translations["send_button_chat"]):  # Використовуємо правильний ключ для кнопки "Відправити"
+    if st.button(translations["send_button_chat"]):  # Ключ для кнопки "Відправити"
         if not user_name.strip():  # Перевірка, чи введено ім'я
             st.warning(translations["name_warning"])
         elif not user_message.strip():  # Перевірка, чи введено повідомлення
             st.warning(translations["message_warning"])
         else:
             send_message()  # Надсилаємо повідомлення
-            st.session_state["temp_user_message"] = ""  # Очищення тимчасового стану після відправлення
+            # Видалення тексту після відправлення через власну змінну
+            st.experimental_rerun()  # Оновлюємо інтерфейс, щоб очистити поле
 
     # Додати інформацію про автора
     st.markdown("---")
