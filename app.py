@@ -79,8 +79,8 @@ st.session_state['user_count'] += 1
 
 # Вибір мови
 with st.sidebar:
-    st.header("🌐 Мова інтерфейсу")
-    lang_choice = st.radio("Оберіть мову:", ["uk", "en"])  # Українська або Англійська
+    st.header(f"🌐 {translations['interface_language']}")
+    lang_choice = st.radio(translations["select_language"], ["uk", "en"])  # Українська або Англійська
     translations = load_language(lang_choice)  # Завантаження перекладу
 
 # Заголовок із стилем
@@ -96,7 +96,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Налаштування
-    st.header("🔧 Налаштування")
+    st.header(f"🔧 {translations['operation_prompt']}")
     operation = st.radio(translations["operation_prompt"], ["Інтегрування", "Диференціювання"])
     theme = st.radio(translations["theme_prompt"], ["Світла", "Темна"])
     st.markdown("---")
@@ -132,14 +132,14 @@ with st.sidebar:
 
 # Введення функції
 st.markdown(
-    """
+    f"""
     <div style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-    <h4>🧮 Введіть функцію для обчислення:</h4>
+    <h4>🧮 {translations['calculation_prompt']}</h4>
     </div>
     """,
     unsafe_allow_html=True
 )
-user_function = st.text_input("Наприклад, x**2 - 4*x + y + z", placeholder="x**2 - 4*x + y + z")
+user_function = st.text_input(translations["input_example"], placeholder="x**2 - 4*x + y + z")
 
 # Побудова графіка функції з перевіркою
 if user_function:
@@ -169,7 +169,7 @@ if user_function:
         roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
         # Побудова графіка
-        if st.checkbox("📊 Показати графік функції"):
+        if st.checkbox(f"📊 {translations['plot_function']}"):
             fig, ax = plt.subplots(figsize=(8, 5))
             ax.plot(x_vals, y_vals, label=f"f(x) = {user_function}", color="blue")
 
