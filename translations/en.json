@@ -45,5 +45,8 @@
     "disconnect_warning": "Connection lost. Check your internet connection.",
     "integral_result": "Integral",
     "derivative_result": "Derivative",
-    "calculation_prompt": "Program for integration and differentiation of functions"
+    "calculation_prompt": "Program for integration and differentiation of functions",
+    "greeting_dyfcalc": "Welcome DyfCalc",
+    "calculation_prompt_dyfcalc": "Program for integration and differentiation of functions"
+
 }
