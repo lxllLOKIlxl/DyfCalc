@@ -96,12 +96,12 @@ with st.sidebar:
 # Заголовок програми
 st.markdown(
     """
-    <div style='background-color: #f0f8ff; padding: 15px; border-radius: 10px;'>
-        <h1 style='text-align: center; color: #2a9df4; font-family: Arial, sans-serif; font-weight: bold;'>
-            Програма для інтегрування і диференціювання
+    <div style='background-color: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 10px; border: 1px solid #d3d3d3;'>
+        <h1 style='text-align: center; color: blue; font-family: Arial, sans-serif; font-weight: bold;'>
+            Вітаємо DyfCalc
         </h1>
-        <h3 style='text-align: center; color: #555; font-family: Arial, sans-serif; margin-top: 5px;'>
-            Введіть вашу функцію нижче, щоб отримати результат
+        <h3 style='text-align: center; color: gray; font-family: Arial, sans-serif; margin-top: 5px;'>
+            Введіть функцію для обчислення:
         </h3>
     </div>
     """,
