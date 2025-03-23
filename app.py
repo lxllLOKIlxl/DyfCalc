@@ -85,13 +85,13 @@ with st.sidebar:
     # Завантаження перекладу після вибору мови
     translations = load_language(lang_choice)
 
-    # Стилізований блок для заголовка "Мова інтерфейсу"
+    # Стилізована секція для "Мова інтерфейсу"
     st.markdown(
         f"""
-        <div style="background-color: #f9f9fc; padding: 8px; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 5px;">
-            <h4 style="color: #000; text-align: center; margin: 0;">🌐 {translations['interface_language']}</h4>
+        <div style="background-color: #f7f9fc; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px;">
+            <h4 style="color: #000; text-align: center; margin: 0; font-family: Arial, sans-serif;">🌍 {translations['interface_language']}</h4>
         </div>
-        <hr style="border: none; border-top: 1px solid #ccc; margin-top: 5px;">
+        <hr style="border: none; border-top: 1px solid #ccc; margin: 10px 0;">
         """,
         unsafe_allow_html=True
     )
