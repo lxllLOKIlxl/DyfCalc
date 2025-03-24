@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-import os
 import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
@@ -7,17 +5,6 @@ import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
 import json
-import threading  # Для роботи з потоками
-import time
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import uvicorn  # Для запуску FastAPI-сервера
-
-# Завантаження змінних середовища
-load_dotenv()
-
-# Ініціалізація FastAPI
-api_app = FastAPI()
 
 # Функція для завантаження перекладів
 def load_translations(lang):
@@ -33,85 +20,29 @@ def load_translations(lang):
 
 # Ініціалізація Firebase з перевіркою
 if not firebase_admin._apps:
-    try:
-        # Спробуємо використати st.secrets, якщо доступний
-        cred = credentials.Certificate({
-            "type": st.secrets["firebase"]["type"],
-            "project_id": st.secrets["firebase"]["project_id"],
-            "private_key_id": st.secrets["firebase"]["private_key_id"],
-            "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
-            "client_email": st.secrets["firebase"]["client_email"],
-            "client_id": st.secrets["firebase"]["client_id"],
-            "auth_uri": st.secrets["firebase"]["auth_uri"],
-            "token_uri": st.secrets["firebase"]["token_uri"],
-            "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
-            "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
-        })
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': st.secrets["firebase"]["databaseURL"]
-        })
-    except Exception as e:
-        st.warning("st.secrets недоступний, переключення на os.environ.")
-        try:
-            # Якщо st.secrets недоступний, використовується os.environ
-            cred = credentials.Certificate({
-                "type": os.environ.get("type"),
-                "project_id": os.environ.get("project_id"),
-                "private_key_id": os.environ.get("private_key_id"),
-                "private_key": os.environ.get("private_key").replace("\\n", "\n"),
-                "client_email": os.environ.get("client_email"),
-                "client_id": os.environ.get("client_id"),
-                "auth_uri": os.environ.get("auth_uri"),
-                "token_uri": os.environ.get("token_uri"),
-                "auth_provider_x509_cert_url": os.environ.get("auth_provider_x509_cert_url"),
-                "client_x509_cert_url": os.environ.get("client_x509_cert_url")
-            })
-            firebase_admin.initialize_app(cred, {
-                'databaseURL': os.environ.get("databaseURL")
-            })
-        except Exception as firebase_error:
-            st.error(f"Не вдалося ініціалізувати Firebase: {firebase_error}")
+    cred = credentials.Certificate({
+        "type": st.secrets["firebase"]["type"],
+        "project_id": st.secrets["firebase"]["project_id"],
+        "private_key_id": st.secrets["firebase"]["private_key_id"],
+        "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+        "client_email": st.secrets["firebase"]["client_email"],
+        "client_id": st.secrets["firebase"]["client_id"],
+        "auth_uri": st.secrets["firebase"]["auth_uri"],
+        "token_uri": st.secrets["firebase"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+    })
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': st.secrets["firebase"]["databaseURL"]
+    })
 
-# Модель для FastAPI
-class CalculationRequest(BaseModel):
-    expression: str  # Математичний вираз
-    operation: str  # Тип операції: "integration" або "differentiation"
-
-# Ендпойнт FastAPI для обчислень
-@api_app.post("/calculate/")
-async def calculate(req: CalculationRequest):
-    try:
-        x = sp.symbols('x')
-        function = sp.sympify(req.expression)
-
-        if req.operation == "integration":
-            result = sp.integrate(function, x)
-        elif req.operation == "differentiation":
-            result = sp.diff(function, x)
-        else:
-            raise ValueError("Unsupported operation. Use 'integration' or 'differentiation'.")
-
-        return {"result": str(result)}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error processing data: {str(e)}")
-
-# Додавання кореневого маршруту
-@api_app.get("/")
-async def root():
-    return {"message": "Welcome to DyfCalc API! Go to /docs for more details."}
-
-# Запуск серверу
-if __name__ == "__main__":
-    uvicorn.run("app:api_app", host="0.0.0.0", port=8000)
-    
 # Функція для надсилання повідомлень
 def send_message(user, text):
     try:
         ref = db.reference('messages')
         new_message = {
             "user": user,
-            "text": text,
-            "timestamp": int(time.time())  # Додаємо часову мітку для очищення
+            "text": text
         }
         ref.push(new_message)
         st.success(translations["update_successful"])
@@ -130,75 +61,14 @@ def get_messages():
         st.error(translations["error_generic"])
         return []
 
-# Функція для автоматичного очищення чату
-def auto_clear_chat():
-    while True:
-        try:
-            current_time = int(time.time())
-            cutoff_time = current_time - 50  # Повідомлення старше 50 секунд будуть видалені
-            ref = db.reference('messages')
-
-            # Видалення повідомлень старше 50 секунд
-            old_messages = ref.order_by_child('timestamp').end_at(cutoff_time).get()
-            if old_messages:
-                for key in old_messages:
-                    ref.child(key).delete()
-
-            time.sleep(50)  # Зачекати 50 секунд до наступного очищення
-        except Exception as e:
-            st.error(f"Помилка очищення чату: {e}")
-            break
-
-# Запуск автоматичного очищення чату
-if not st.session_state.get("auto_clear_initialized", False):
-    threading.Thread(target=auto_clear_chat, daemon=True).start()
-    st.session_state["auto_clear_initialized"] = True
-
 # Вибір мови
 with st.sidebar:
-    st.markdown(
-        """
-        <style>
-            .language-container {
-                padding: 10px 0;
-                font-family: 'Arial', sans-serif;
-                text-align: center;
-                font-weight: bold;
-                border-bottom: 2px solid #ccc; /* Нижня рисочка */
-            }
-            .stRadio > div {
-                display: flex;
-                justify-content: center;
-            }
-        </style>
-        <div class="language-container">
-            🌍 Вибір мови / Language:
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    lang = st.radio(
-        " ",
-        ["uk", "en"],
-        index=0,
-        horizontal=True
-    )
+    lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
     translations = load_translations(lang)
 
-# Заголовок програми
-st.markdown(
-    f"""
-    <div style='background-color: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;'>
-        <h1 style='text-align: center; color: blue; font-family: Arial, sans-serif; font-weight: bold;'>
-            {translations.get('greeting_dyfcalc', 'Вітаємо DyfCalc')}
-        </h1>
-        <h3 style='text-align: center; color: gray; font-family: Arial, sans-serif;'>
-            {translations.get('calculation_prompt_dyfcalc', 'Введіть функцію для обчислення')}
-        </h3>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Заголовок
+st.markdown(f"<h1 style='text-align: center; color: blue;'>{translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
+st.markdown(f"<h3 style='text-align: center; color: gray;'>{translations['calculation_prompt']}</h3>", unsafe_allow_html=True)
 st.markdown("---")
 
 # Бокова панель із параметрами та чатом
@@ -235,7 +105,7 @@ with st.sidebar:
         f"""
         <div style="text-align: center; color: gray;">
         {translations['project_by']}<br>
-        Шаблінський С.І.
+        Програма ver 1.0
         </div>
         """,
         unsafe_allow_html=True
