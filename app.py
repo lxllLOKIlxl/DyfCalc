@@ -280,7 +280,7 @@ with st.sidebar:
 
 with st.sidebar:
     st.header(translations["ideas_header"])
-    
+
     # Ініціалізація session_state для введення пропозиції
     if "suggestion_input" not in st.session_state:
         st.session_state["suggestion_input"] = ""  # Початкове значення
@@ -299,23 +299,35 @@ with st.sidebar:
 
     # Поле для введення нової ідеї
     user_suggestion = st.text_area(
-        translations["your_suggestion"],
+        translations["your_suggestion"], 
         placeholder=translations["placeholder_suggestion"],
         key="suggestion_input"
     )
 
     # Кнопка для додавання нової ідеї
     if st.button(translations["add_idea_button"]):
-        if st.session_state["suggestion_input"].strip():  # Перевірка введеного тексту
+        if st.session_state.suggestion_input.strip():  # Перевірка введеного тексту
             try:
-                save_suggestion(st.session_state["suggestion_input"])  # Збереження нової пропозиції
+                # Збереження нової пропозиції
+                save_suggestion(st.session_state.suggestion_input)
                 st.success(translations["idea_added_success"])
 
-                # Очищення поля після успішного збереження
-                st.session_state["suggestion_input"] = ""  # Очищення тексту
+                # Оновити список пропозицій після додавання
+                suggestions = get_suggestions()
+                st.subheader(translations["existing_ideas"])
+                if suggestions:
+                    for suggestion in suggestions:
+                        st.markdown(f"- {suggestion}")
+                else:
+                    st.markdown(translations["no_ideas_yet"])
+
+                # Очищення поля після успішного відправлення
+                st.session_state["suggestion_input"] = ""  # Очищення через session_state
             except Exception as e:
-                st.error(f"{translations['idea_add_error']}: {e}")
+                # Вивести справжню помилку, якщо щось не так у збереженні
+                st.error(f"{translations['idea_add_error']}: {str(e)}")
         else:
+            # Якщо користувач не ввів текст, виводимо попередження
             st.warning(translations["write_idea_warning"])
 
     # Нижня частина (автор)
