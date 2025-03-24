@@ -51,8 +51,8 @@ def save_suggestion(suggestion):
 def get_suggestions():
     """Отримує пропозиції та видаляє ті, що старші за 10 хвилин."""
     try:
-        ref = db.reference('suggestions')
-        suggestions = ref.get()
+        ref = db.reference('suggestions')  # Посилання до Firebase
+        suggestions = ref.get()  # Отримати дані
         valid_suggestions = []
         current_time = int(time.time())
         cutoff_time = current_time - 600  # 10 хвилин = 600 секунд
@@ -62,12 +62,12 @@ def get_suggestions():
                 if "timestamp" in value and current_time - value["timestamp"] <= 600:
                     valid_suggestions.append(value["text"])  # Актуальні записи
                 else:
-                    # Видалення застарілих записів
-                    ref.child(key).delete()
+                    ref.child(key).delete()  # Видалити старі записи
         return valid_suggestions
     except Exception as e:
         st.error(f"{translations['idea_add_error']}: {e}")
         return []
+
 # Функція для надсилання повідомлень
 def send_message(user, text):
     try:
@@ -280,7 +280,7 @@ with st.sidebar:
 
 with st.sidebar:
     st.header(translations["ideas_header"])
-
+    
     # Ініціалізація session_state для введення пропозиції
     if "suggestion_input" not in st.session_state:
         st.session_state["suggestion_input"] = ""  # Початкове значення
