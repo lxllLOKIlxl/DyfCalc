@@ -166,7 +166,7 @@ with st.sidebar:
     st.markdown("---")
 
 with st.sidebar:
-    # Вставте ваш код тут з правильними відступами
+    # Вст
 
     # Секція "Користувачі онлайн"
     st.markdown(
