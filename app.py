@@ -249,16 +249,16 @@ with st.sidebar:
     st.markdown("---")
 
     # Нижня частина (автор)
-    st.markdown(
-        f"""
-        <div style="text-align: center; color: gray; margin-top: 20px; padding: 10px; border-top: 1px solid #ddd;">
-        {translations['project_by']}<br>
-        <strong style="font-size: 16px;">Шаблінський С.І.</strong><br>
-        <img src="https://img.icons8.com/color/96/null/code.png" alt="Code Icon" width="50">
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+st.markdown(
+    f"""
+    <div style="text-align: center; color: gray; margin-top: 20px; padding: 10px; border-top: 1px solid #ddd;">
+    {translations['project_by']}<br>
+    <strong style="font-size: 16px;">{translations['author_shablinsky']}</strong><br>
+    <img src="https://img.icons8.com/color/96/null/code.png" alt="Code Icon" width="50">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # Основна функціональність калькулятора
 st.markdown(
