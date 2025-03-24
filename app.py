@@ -122,13 +122,26 @@ with st.sidebar:
 # Заголовок програми
 st.markdown(
     f"""
-    <div style='background-color: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;'>
-        <h1 style='text-align: center; color: blue; font-family: Arial, sans-serif; font-weight: bold;'>
+    <div style='
+        background-color: rgba(255, 255, 255, 0.1); 
+        padding: 10px; 
+        border-radius: 10px; 
+        border: 1px solid rgba(0, 0, 0, 0.2);'>
+        <h2 style='
+            text-align: center; 
+            color: blue; 
+            font-family: Arial, sans-serif; 
+            font-weight: bold; 
+            font-size: 24px;'>
             {translations.get('greeting_dyfcalc', 'Вітаємо DyfCalc')}
-        </h1>
-        <h3 style='text-align: center; color: gray; font-family: Arial, sans-serif;'>
+        </h2>
+        <h4 style='
+            text-align: center; 
+            color: gray; 
+            font-family: Arial, sans-serif; 
+            font-size: 16px;'>
             {translations.get('calculation_prompt_dyfcalc', 'Введіть функцію для обчислення')}
-        </h3>
+        </h4>
     </div>
     """,
     unsafe_allow_html=True
