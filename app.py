@@ -249,10 +249,10 @@ with st.sidebar:
     st.markdown("---")
 
 with st.sidebar:
-    st.header("💡 Ідеї для покращення")
+    st.header(translations["ideas_header"])
     
     # Виведення вже існуючих пропозицій
-    st.subheader("Записи від користувачів:")
+    st.subheader(translations["existing_ideas"])
     try:
         # Отримати існуючі записи з бази даних (приклад: Firebase)
         suggestions = get_suggestions()  # Функція для отримання записів
@@ -260,23 +260,23 @@ with st.sidebar:
             for suggestion in suggestions:
                 st.markdown(f"- {suggestion}")
         else:
-            st.markdown("Немає ідей. Будьте першим, хто додасть!")
+            st.markdown(translations["no_ideas_yet"])
     except Exception as e:
-        st.error("Не вдалося завантажити записи.")
+        st.error(translations["idea_add_error"])
 
     # Додавання нової пропозиції
-    st.subheader("Залиште вашу ідею:")
-    user_suggestion = st.text_area("Ваша пропозиція", placeholder="Напишіть, що можна покращити...")
-    if st.button("Додати ідею"):
+    st.subheader(translations["add_your_idea"])
+    user_suggestion = st.text_area(translations["your_suggestion"], placeholder=translations["placeholder_suggestion"])
+    if st.button(translations["add_idea_button"]):
         if user_suggestion.strip():
             try:
                 # Збереження запису в базу даних (приклад: Firebase)
                 save_suggestion(user_suggestion)  # Функція для збереження записів
-                st.success("Дякуємо! Ваша ідея додана.")
+                st.success(translations["idea_added_success"])
             except Exception as e:
-                st.error("Не вдалося зберегти ідею.")
+                st.error(translations["idea_add_error"])
         else:
-            st.warning("Будь ласка, напишіть текст перед додаванням.")
+            st.warning(translations["write_idea_warning"])
 
     # Нижня частина (автор)
     st.markdown(
