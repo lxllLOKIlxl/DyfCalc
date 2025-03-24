@@ -4,7 +4,6 @@ import streamlit as st
 import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
-from matplotlib.animation import FuncAnimation
 import json
 import threading  # Для роботи з потоками
 import time
@@ -268,9 +267,6 @@ st.markdown(
 )
 user_function = st.text_input(translations["input_example"], placeholder=translations["input_example"])
 
-start = st.number_input("Початкова точка інтеграції (або діапазону графіка):", value=-10.0)
-end = st.number_input("Кінцева точка інтеграції (або діапазону графіка):", value=10.0)
-
 # Побудова графіка функції з перевіркою
 if user_function:
     try:
@@ -281,13 +277,13 @@ if user_function:
         function = function.subs(substitutions)
 
         func_np = sp.lambdify(x, function, "numpy")
-        x_vals = np.linspace(start, end, 500)
+        x_vals = np.linspace(-10, 10, 500)
         y_vals = func_np(x_vals)
 
         roots = sp.solve(function, x)
         roots_np = [float(root.evalf()) for root in roots if sp.im(root) == 0]
 
-        # Опція побудови графіка з анімацією
+        # Побудова графіка
         if st.checkbox(translations["plot_function"]):
             fig, ax = plt.subplots(figsize=(8, 5))
             ax.set_facecolor("#f5f5f5")
@@ -308,20 +304,6 @@ if user_function:
             ax.set_ylabel("f(x)", fontsize=14, color="#555")
             ax.legend(loc="upper left", frameon=True, shadow=True, facecolor="#E6E6E6", edgecolor="#333")
             ax.grid(color="#CCCCCC", linestyle="--", linewidth=0.7)
-            st.pyplot(fig)
-
-        # Опція інтерактивного анімованого графіка
-        if st.checkbox("Анімований графік"):
-            fig, ax = plt.subplots(figsize=(8, 5))
-            ax.set_facecolor("#f5f5f5")
-            ax.set_title("Анімований графік функції", fontsize=18, color="#333")
-            line, = ax.plot([], [], color="#007BFF", linewidth=2)
-
-            def update(frame):
-                line.set_data(x_vals[:frame], y_vals[:frame])
-                return line,
-
-            ani = FuncAnimation(fig, update, frames=len(x_vals), interval=50, blit=True)
             st.pyplot(fig)
 
     except Exception as e:
@@ -350,14 +332,14 @@ st.markdown("""
 if st.button(translations["calculate_button"]):
     try:
         if operation == translations["integration"]:
-            result = sp.integrate(function, (x, start, end))
+            result = sp.integrate(function, x)
             st.success(f"🎉 {translations['integral_result']}: {result}")
         elif operation == translations["differentiation"]:
             result = sp.diff(function, x)
             st.success(f"🧮 {translations['derivative_result']}: {result}")
     except Exception as e:
         st.error(f"{translations['error_generic']}: {e}")
-
+        
 # Додатковий стиль
 st.markdown(
     """
