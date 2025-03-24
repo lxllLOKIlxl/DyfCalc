@@ -88,27 +88,40 @@ if not st.session_state.get("auto_clear_initialized", False):
     threading.Thread(target=auto_clear_chat, daemon=True).start()
     st.session_state["auto_clear_initialized"] = True
 
-# Вибір мови з прозорою оболонкою, включаючи заголовок і перемикачі
+# Вибір мови з покращеним стилем
 with st.sidebar:
     st.markdown(
         """
-        <div style='background-color: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 10px; text-align: center;'>
-            <h4 style='color: #333; font-family: Arial, sans-serif; font-weight: bold;'>
-                🌍 Вибір мови / Language:
-            </h4>
-            <style>
-                .stRadio > div {text-align: center;}
-            </style>
+        <style>
+            .language-container {
+                background-color: rgba(255, 255, 255, 0.2);
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                font-family: 'Arial', sans-serif;
+            }
+            .language-container h4 {
+                color: #333;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .stRadio > div {
+                display: flex;
+                justify-content: center;
+            }
+        </style>
+        <div class="language-container">
+            <h4>🌍 Вибір мови / Language:</h4>
+        </div>
         """,
         unsafe_allow_html=True
     )
     lang = st.radio(
-        " ",  # Приховує текст лейблу
+        " ",
         ["uk", "en"],
         index=0,
         horizontal=True
     )
-    st.markdown("</div>", unsafe_allow_html=True)  # Завершуємо оболонку
     translations = load_translations(lang)
 
 # Заголовок програми
