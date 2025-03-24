@@ -166,25 +166,41 @@ with st.sidebar:
     st.markdown("---")
 
     # Секція "Користувачі онлайн"
-    st.markdown(
-        f"""
-        <div style="border: 2px solid #4CAF50; border-radius: 10px; padding: 10px; background-color: rgba(76, 175, 80, 0.1);">
-            <h4 style="color: #4CAF50; text-align: center; font-weight: bold;">
-                {translations['online_users']}
-            </h4>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
-                <span style="font-size: 18px; color: #333; font-weight: bold;">
-                    {st.session_state.get('user_count', 1)} {translations['online_count']}
-                </span>
-            </div>
+st.markdown(
+    f"""
+    <div style="
+        border: 2px solid #4CAF50; 
+        border-radius: 15px; 
+        padding: 15px; 
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(255, 255, 255, 0.5));">
+        <h4 style="
+            color: #2E7D32; 
+            text-align: center; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif;">
+            {translations['online_users']}
+        </h4>
+        <div style="
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px;">
+            <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="40">
+            <span style="
+                font-size: 20px; 
+                color: #2E7D32; 
+                font-weight: 600; 
+                font-family: 'Verdana', sans-serif;">
+                {st.session_state.get('user_count', 1)} {translations['online_count']}
+            </span>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-    st.markdown("---")
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown("---")
 
-    # Секція чату (тепер унизу)
+    # Секція чату 
     st.markdown(
         f"""
         <div style="border: 2px solid #2196F3; border-radius: 10px; padding: 10px; background-color: rgba(33, 150, 243, 0.1);">
