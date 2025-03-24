@@ -10,6 +10,7 @@ import time
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn  # Для запуску FastAPI-сервера
+import os  # Додаємо імпорт для роботи зі змінними середовища
 
 # Ініціалізація FastAPI
 api_app = FastAPI()
@@ -28,21 +29,40 @@ def load_translations(lang):
 
 # Ініціалізація Firebase з перевіркою
 if not firebase_admin._apps:
-    cred = credentials.Certificate({
-        "type": st.secrets["firebase"]["type"],
-        "project_id": st.secrets["firebase"]["project_id"],
-        "private_key_id": st.secrets["firebase"]["private_key_id"],
-        "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
-        "client_email": st.secrets["firebase"]["client_email"],
-        "client_id": st.secrets["firebase"]["client_id"],
-        "auth_uri": st.secrets["firebase"]["auth_uri"],
-        "token_uri": st.secrets["firebase"]["token_uri"],
-        "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
-        "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
-    })
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': st.secrets["firebase"]["databaseURL"]
-    })
+    try:
+        # Спробуємо використати st.secrets (для локальної роботи або підтримки Streamlit)
+        cred = credentials.Certificate({
+            "type": st.secrets["firebase"]["type"],
+            "project_id": st.secrets["firebase"]["project_id"],
+            "private_key_id": st.secrets["firebase"]["private_key_id"],
+            "private_key": st.secrets["firebase"]["private_key"].replace("\\n", "\n"),
+            "client_email": st.secrets["firebase"]["client_email"],
+            "client_id": st.secrets["firebase"]["client_id"],
+            "auth_uri": st.secrets["firebase"]["auth_uri"],
+            "token_uri": st.secrets["firebase"]["token_uri"],
+            "auth_provider_x509_cert_url": st.secrets["firebase"]["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": st.secrets["firebase"]["client_x509_cert_url"]
+        })
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': st.secrets["firebase"]["databaseURL"]
+        })
+    except Exception:
+        # Якщо st.secrets недоступний, використовується os.environ (для платформи Render)
+        cred = credentials.Certificate({
+            "type": os.environ["type"],
+            "project_id": os.environ["project_id"],
+            "private_key_id": os.environ["private_key_id"],
+            "private_key": os.environ["private_key"].replace("\\n", "\n"),
+            "client_email": os.environ["client_email"],
+            "client_id": os.environ["client_id"],
+            "auth_uri": os.environ["auth_uri"],
+            "token_uri": os.environ["token_uri"],
+            "auth_provider_x509_cert_url": os.environ["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": os.environ["client_x509_cert_url"]
+        })
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': os.environ["databaseURL"]
+        })
 
 # Модель для FastAPI
 class CalculationRequest(BaseModel):
