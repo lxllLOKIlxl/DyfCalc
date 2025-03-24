@@ -169,7 +169,7 @@ with st.sidebar:
         f"""
         <div style="text-align: center; color: gray;">
         {translations['project_by']}<br>
-        Програма ver 1.0
+        Програма ver 1.0 Шаблінський С.І.
         </div>
         """,
         unsafe_allow_html=True
