@@ -93,18 +93,12 @@ with st.sidebar:
     st.markdown(
         """
         <div style='background-color: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 8px; text-align: center;'>
-            <h4 style='color: #333; font-family: Arial, sans-serif; font-weight: bold;'>🌍 Вибір мови / Language:</h4>
+            <h4 style='color: #333; font-family: Arial, sans-serif; font-weight: bold;'>🌍 {}</h4>
         </div>
         """,
         unsafe_allow_html=True
     )
-    lang = st.radio("", ["uk", "en"], index=0, horizontal=True)
-    st.markdown(
-        """
-        <hr style='border: none; border-top: 1px solid #ccc;'>
-        """
-    )
-    translations = load_translations(lang)
+    lang`
 
 # Заголовок програми
 st.markdown(
