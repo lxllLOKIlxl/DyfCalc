@@ -90,29 +90,7 @@ if not st.session_state.get("auto_clear_initialized", False):
 
 # Вибір мови
 with st.sidebar:
-    st.markdown(
-        """
-        <div style='background-color: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 10px; text-align: center;'>
-            <h4 style='color: #333; font-family: Arial, sans-serif; font-weight: bold;'>
-                🌍 Вибір мови / Language:
-            </h4>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        """
-        <div style='background-color: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 10px; text-align: center;'>
-        """,
-        unsafe_allow_html=True
-    )
-    lang = st.radio(
-        " ",
-        ["uk", "en"],
-        index=0,
-        horizontal=True
-    )
-    st.markdown("</div>", unsafe_allow_html=True)  # Завершення прозорої оболонки
+    lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
     translations = load_translations(lang)
 
 # Заголовок програми
