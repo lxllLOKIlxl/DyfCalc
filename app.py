@@ -7,6 +7,12 @@ from firebase_admin import credentials, db
 import json
 import threading  # Для роботи з потоками
 import time
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import uvicorn  # Для запуску FastAPI-сервера
+
+# Ініціалізація FastAPI
+api_app = FastAPI()
 
 # Функція для завантаження перекладів
 def load_translations(lang):
@@ -37,6 +43,29 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred, {
         'databaseURL': st.secrets["firebase"]["databaseURL"]
     })
+
+# Модель для FastAPI
+class CalculationRequest(BaseModel):
+    expression: str  # Математичний вираз
+    operation: str  # Тип операції: "integration" або "differentiation"
+
+# Ендпойнт FastAPI для обчислень
+@api_app.post("/calculate/")
+async def calculate(req: CalculationRequest):
+    try:
+        x = sp.symbols('x')
+        function = sp.sympify(req.expression)
+
+        if req.operation == "integration":
+            result = sp.integrate(function, x)
+        elif req.operation == "differentiation":
+            result = sp.diff(function, x)
+        else:
+            raise ValueError("Unsupported operation. Use 'integration' or 'differentiation'.")
+
+        return {"result": str(result)}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error processing data: {str(e)}")
 
 # Функція для надсилання повідомлень
 def send_message(user, text):
