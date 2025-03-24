@@ -1,3 +1,10 @@
+# Завантаження змінних середовища
+from dotenv import load_dotenv
+import os
+
+# Ініціалізація dotenv
+load_dotenv()
+
 import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
@@ -10,7 +17,6 @@ import time
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn  # Для запуску FastAPI-сервера
-import os  # Додаємо імпорт для роботи зі змінними середовища
 
 # Ініціалізація FastAPI
 api_app = FastAPI()
