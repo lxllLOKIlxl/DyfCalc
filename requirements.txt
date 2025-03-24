@@ -5,3 +5,6 @@ streamlit
 plotly
 firebase-admin
 websockets
+fastapi
+uvicorn
+pydantic
