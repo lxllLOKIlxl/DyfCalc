@@ -92,6 +92,10 @@ async def calculate(req: CalculationRequest):
 async def root():
     return {"message": "Welcome to DyfCalc API! Go to /docs for more details."}
 
+# Запуск серверу
+if __name__ == "__main__":
+    uvicorn.run("app:api_app", host="0.0.0.0", port=8000, reload=True)
+    
 # Функція для надсилання повідомлень
 def send_message(user, text):
     try:
