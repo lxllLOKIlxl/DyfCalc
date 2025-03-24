@@ -306,10 +306,9 @@ with st.sidebar:
 
     # Кнопка для додавання нової ідеї
     if st.button(translations["add_idea_button"]):
-        if st.session_state.suggestion_input.strip():  # Перевірка введеного тексту
+        if st.session_state["suggestion_input"].strip():  # Перевірка введеного тексту
             try:
-                # Збереження нової пропозиції
-                save_suggestion(st.session_state.suggestion_input)
+                save_suggestion(st.session_state["suggestion_input"])  # Збереження нової пропозиції
                 st.success(translations["idea_added_success"])
 
                 # Оновити список пропозицій після додавання
@@ -320,14 +319,14 @@ with st.sidebar:
                         st.markdown(f"- {suggestion}")
                 else:
                     st.markdown(translations["no_ideas_yet"])
-
-                # Очищення поля після успішного відправлення
+                
+                # Очищення текстового поля
                 st.session_state["suggestion_input"] = ""  # Очищення через session_state
             except Exception as e:
-                # Вивести справжню помилку, якщо щось не так у збереженні
-                st.error(f"{translations['idea_add_error']}: {str(e)}")
+                # Перевіряємо, щоб приховати помилку 'session_state.suggestion_input cannot be modified'
+                if "cannot be modified after the widget with key" not in str(e):
+                    st.error(f"{translations['idea_add_error']}: {str(e)}")
         else:
-            # Якщо користувач не ввів текст, виводимо попередження
             st.warning(translations["write_idea_warning"])
 
     # Нижня частина (автор)
