@@ -137,7 +137,7 @@ st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
-    # Секція налаштувань (тепер зверху)
+    # Секція налаштувань
     st.markdown(
         f"""
         <div style="border: 2px solid #FF9800; border-radius: 10px; padding: 10px; background-color: rgba(255, 152, 0, 0.1);">
@@ -167,39 +167,40 @@ with st.sidebar:
 
 with st.sidebar:
     # Секція "Користувачі онлайн"
-    st.markdown(
-        f"""
+st.markdown(
+    f"""
+    <div style="
+        border: 1px solid #D3D3D3; 
+        border-radius: 10px; 
+        padding: 10px; 
+        background: linear-gradient(135deg, rgba(240, 240, 240, 0.9), rgba(255, 255, 255, 0.6));">
+        <h5 style="
+            color: #333; 
+            text-align: center; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            font-size: 16px;">
+            {translations['online_users']}
+        </h5>
         <div style="
-            border: 2px solid #D3D3D3; 
-            border-radius: 15px; 
-            padding: 15px; 
-            background: linear-gradient(135deg, rgba(240, 240, 240, 0.8), rgba(255, 255, 255, 0.5));">
-            <h4 style="
-                color: #333; 
-                text-align: center; 
-                font-weight: bold; 
-                font-family: Arial, sans-serif;">
-                {translations['online_users']}
-            </h4>
-            <div style="
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 15px;">
-                <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="40">
-                <span style="
-                    font-size: 20px; 
-                    color: #555; 
-                    font-weight: 600; 
-                    font-family: 'Verdana', sans-serif;">
-                    {st.session_state.get('user_count', 1)} {translations['online_count']}
-                </span>
-            </div>
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;">
+            <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
+            <span style="
+                font-size: 18px; 
+                color: #555; 
+                font-weight: 600; 
+                font-family: 'Verdana', sans-serif;">
+                {st.session_state.get('user_count', 1)} {translations['online_count']}
+            </span>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-    st.markdown("---")
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown("---")
 
     # Секція чату 
     st.markdown(
