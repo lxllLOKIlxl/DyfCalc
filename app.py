@@ -137,20 +137,10 @@ st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
-    # Користувачі онлайн
     st.header(f"{translations['online_users']}")
-    st.markdown(
-        f"""
-        <div style="text-align: center; color: #2a9df4; font-family: Arial, sans-serif; font-weight: bold; border-bottom: 2px solid #ccc; padding-bottom: 10px;">
-            ![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png)
-            **{st.session_state.get('user_count', 1)} {translations['online_count']}**
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.markdown(f"![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state.get('user_count', 1)} {translations['online_count']}**")
     st.markdown("---")
 
-    # Секція чату
     st.header(translations["online_chat"])
     user = st.text_input(translations["name_prompt"], key="chat_user_name")
     message = st.text_input(translations["message_prompt"], key="chat_user_message")
@@ -169,20 +159,17 @@ with st.sidebar:
         st.write(translations["no_results"])
     st.markdown("---")
 
-    # Налаштування
     st.header(translations["settings_title"])
     operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]])
     st.markdown("---")
     st.header(translations["theme_prompt"])
     theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]])
     st.markdown("---")
-
-    # Інформація про автора
     st.markdown(
         f"""
-        <div style="text-align: center; color: gray; font-family: Arial, sans-serif; padding-top: 10px;">
+        <div style="text-align: center; color: gray;">
         {translations['project_by']}<br>
-        <strong>Шаблінський С.І.</strong>
+        Шаблінський С.І.
         </div>
         """,
         unsafe_allow_html=True
