@@ -284,7 +284,7 @@ with st.sidebar:
     # Виведення вже існуючих пропозицій
     st.subheader(translations["existing_ideas"])
     try:
-        # Отримати існуючі записи з бази даних (приклад: Firebase)
+        # Отримати існуючі записи з бази даних (Firebase)
         suggestions = get_suggestions()  # Функція для отримання записів
         if suggestions:
             for suggestion in suggestions:
@@ -296,15 +296,32 @@ with st.sidebar:
 
     # Додавання нової пропозиції
     st.subheader(translations["add_your_idea"])
-    user_suggestion = st.text_area(translations["your_suggestion"], placeholder=translations["placeholder_suggestion"])
-    if st.button(translations["add_idea_button"]):
+    user_suggestion = st.text_area(
+        translations["your_suggestion"], 
+        placeholder=translations["placeholder_suggestion"], 
+        key="suggestion_input"
+    )
+
+    if st.button(translations["add_idea_button"], key="add_idea_button"):
         if user_suggestion.strip():
             try:
-                # Збереження запису в базу даних (приклад: Firebase)
-                save_suggestion(user_suggestion)  # Функція для збереження записів
+                # Збереження запису в базу даних (Firebase)
+                save_suggestion(user_suggestion)  # Виклик функції для запису
                 st.success(translations["idea_added_success"])
+
+                # Примусове оновлення списку
+                suggestions = get_suggestions()  # Оновити список ідей
+                st.subheader(translations["existing_ideas"])
+                if suggestions:
+                    for suggestion in suggestions:
+                        st.markdown(f"- {suggestion}")
+                else:
+                    st.markdown(translations["no_ideas_yet"])
+                
+                # Очистити текстове поле після відправлення
+                st.session_state["suggestion_input"] = ""
             except Exception as e:
-                st.error(translations["idea_add_error"])
+                st.error(f"{translations['idea_add_error']}: {e}")
         else:
             st.warning(translations["write_idea_warning"])
 
