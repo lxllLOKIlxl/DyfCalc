@@ -166,41 +166,43 @@ with st.sidebar:
     st.markdown("---")
 
 with st.sidebar:
+    # Вставте ваш код тут з правильними відступами
+
     # Секція "Користувачі онлайн"
-st.markdown(
-    f"""
-    <div style="
-        border: 1px solid #D3D3D3; 
-        border-radius: 10px; 
-        padding: 10px; 
-        background: linear-gradient(135deg, rgba(240, 240, 240, 0.9), rgba(255, 255, 255, 0.6));">
-        <h5 style="
-            color: #333; 
-            text-align: center; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            font-size: 16px;">
-            {translations['online_users']}
-        </h5>
+    st.markdown(
+        f"""
         <div style="
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;">
-            <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
-            <span style="
-                font-size: 18px; 
-                color: #555; 
-                font-weight: 600; 
-                font-family: 'Verdana', sans-serif;">
-                {st.session_state.get('user_count', 1)} {translations['online_count']}
-            </span>
+            border: 1px solid #D3D3D3; 
+            border-radius: 10px; 
+            padding: 10px; 
+            background: linear-gradient(135deg, rgba(240, 240, 240, 0.9), rgba(255, 255, 255, 0.6));">
+            <h5 style="
+                color: #333; 
+                text-align: center; 
+                font-weight: bold; 
+                font-family: Arial, sans-serif; 
+                font-size: 16px;">
+                {translations['online_users']}
+            </h5>
+            <div style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                gap: 10px;">
+                <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
+                <span style="
+                    font-size: 18px; 
+                    color: #555; 
+                    font-weight: 600; 
+                    font-family: 'Verdana', sans-serif;">
+                    {st.session_state.get('user_count', 1)} {translations['online_count']}
+                </span>
+            </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("---")
+        """,
+        unsafe_allow_html=True
+    )
+    st.markdown("---")
 
     # Секція чату 
     st.markdown(
