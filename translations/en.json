@@ -47,6 +47,6 @@
     "derivative_result": "Derivative",
     "calculation_prompt": "Program for integration and differentiation of functions",
     "greeting_dyfcalc": "Welcome DyfCalc",
-    "calculation_prompt_dyfcalc": "Program for integration and differentiation of functions"
-
+    "calculation_prompt_dyfcalc": "Program for integration and differentiation of functions",
+    "author_shablinsky": "Shablinsky S.I."
 }
