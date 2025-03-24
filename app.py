@@ -281,14 +281,14 @@ with st.sidebar:
 with st.sidebar:
     st.header(translations["ideas_header"])
 
-    # Ініціалізація session_state для введення пропозиції
+    # Initialize session_state for suggestion input
     if "suggestion_input" not in st.session_state:
-        st.session_state["suggestion_input"] = ""  # Початкове значення
+        st.session_state["suggestion_input"] = ""  # Default value
 
-    # Виведення існуючих пропозицій
+    # Display existing suggestions
     st.subheader(translations["existing_ideas"])
     try:
-        suggestions = get_suggestions()  # Отримати список існуючих ідей
+        suggestions = get_suggestions()  # Retrieve list of existing ideas
         if suggestions:
             for suggestion in suggestions:
                 st.markdown(f"- {suggestion}")
@@ -297,21 +297,21 @@ with st.sidebar:
     except Exception as e:
         st.error(translations["idea_add_error"])
 
-    # Поле для введення нової ідеї
+    # Input field for new suggestion
     user_suggestion = st.text_area(
         translations["your_suggestion"],
         placeholder=translations["placeholder_suggestion"],
         key="suggestion_input"
     )
 
-    # Кнопка для додавання нової ідеї
+    # Button to add a new idea
     if st.button(translations["add_idea_button"]):
-        if user_suggestion.strip():  # Перевірка введеного тексту
+        if st.session_state.suggestion_input.strip():  # Check for empty input
             try:
-                save_suggestion(user_suggestion)  # Збереження нової пропозиції
+                save_suggestion(st.session_state.suggestion_input)  # Save the new idea
                 st.success(translations["idea_added_success"])
 
-                # Оновлення списку пропозицій
+                # Update suggestion list
                 suggestions = get_suggestions()
                 st.subheader(translations["existing_ideas"])
                 if suggestions:
@@ -319,9 +319,9 @@ with st.sidebar:
                         st.markdown(f"- {suggestion}")
                 else:
                     st.markdown(translations["no_ideas_yet"])
-                
-                # **Очищення поля через перезапуск сторінки**
-                st.experimental_set_query_params()  # Перезапуск сторінки для очищення
+
+                # Clear input field using st.set_query_params
+                st.set_query_params()  # Clears the page parameters to reset the field
             except Exception as e:
                 st.error(f"{translations['idea_add_error']}: {e}")
         else:
