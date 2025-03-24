@@ -88,14 +88,17 @@ if not st.session_state.get("auto_clear_initialized", False):
     threading.Thread(target=auto_clear_chat, daemon=True).start()
     st.session_state["auto_clear_initialized"] = True
 
-# Вибір мови
+# Вибір мови з прозорою оболонкою, включаючи заголовок і перемикачі
 with st.sidebar:
     st.markdown(
         """
-        <div style='background-color: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; text-align: center;'>
+        <div style='background-color: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 10px; text-align: center;'>
             <h4 style='color: #333; font-family: Arial, sans-serif; font-weight: bold;'>
                 🌍 Вибір мови / Language:
             </h4>
+            <style>
+                .stRadio > div {text-align: center;}
+            </style>
         """,
         unsafe_allow_html=True
     )
@@ -105,7 +108,7 @@ with st.sidebar:
         index=0,
         horizontal=True
     )
-    st.markdown("</div>", unsafe_allow_html=True)  # Закриваємо div для прозорого фону
+    st.markdown("</div>", unsafe_allow_html=True)  # Завершуємо оболонку
     translations = load_translations(lang)
 
 # Заголовок програми
