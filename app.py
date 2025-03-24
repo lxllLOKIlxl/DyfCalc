@@ -37,7 +37,37 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred, {
         'databaseURL': st.secrets["firebase"]["databaseURL"]
     })
+# Функція для збереження ідей
+def save_suggestion(suggestion):
+    """Зберігає пропозицію в Firebase разом із часовою міткою."""
+    try:
+        timestamp = int(time.time())  # Часова мітка в секундах
+        ref = db.reference('suggestions')
+        ref.push({"text": suggestion, "timestamp": timestamp})
+    except Exception as e:
+        st.error(f"{translations['idea_add_error']}: {e}")
 
+# Функція для отримання ідей
+def get_suggestions():
+    """Отримує пропозиції та видаляє ті, що старші за 10 хвилин."""
+    try:
+        ref = db.reference('suggestions')
+        suggestions = ref.get()
+        valid_suggestions = []
+        current_time = int(time.time())
+        cutoff_time = current_time - 600  # 10 хвилин = 600 секунд
+
+        if suggestions:
+            for key, value in suggestions.items():
+                if "timestamp" in value and current_time - value["timestamp"] <= 600:
+                    valid_suggestions.append(value["text"])  # Актуальні записи
+                else:
+                    # Видалення застарілих записів
+                    ref.child(key).delete()
+        return valid_suggestions
+    except Exception as e:
+        st.error(f"{translations['idea_add_error']}: {e}")
+        return []
 # Функція для надсилання повідомлень
 def send_message(user, text):
     try:
