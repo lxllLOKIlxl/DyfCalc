@@ -142,13 +142,14 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="text-align: center; color: #2a9df4; font-family: Arial, sans-serif; font-weight: bold; border-bottom: 2px solid #ccc; padding-bottom: 10px;">
-            ![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state.get('user_count', 1)} {translations['online_count']}**
+            ![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png)
+            **{st.session_state.get('user_count', 1)} {translations['online_count']}**
         </div>
         """,
         unsafe_allow_html=True
     )
     st.markdown("---")
-    
+
     # Секція чату
     st.header(translations["online_chat"])
     user = st.text_input(translations["name_prompt"], key="chat_user_name")
@@ -175,7 +176,7 @@ with st.sidebar:
     st.header(translations["theme_prompt"])
     theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]])
     st.markdown("---")
-    
+
     # Інформація про автора
     st.markdown(
         f"""
