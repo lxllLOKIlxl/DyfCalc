@@ -48,5 +48,15 @@
     "calculation_prompt": "Program for integration and differentiation of functions",
     "greeting_dyfcalc": "Welcome DyfCalc",
     "calculation_prompt_dyfcalc": "Program for integration and differentiation of functions",
-    "author_shablinsky": "Shablinsky S.I."
+    "author_shablinsky": "Shablinsky S.I.",
+    "ideas_header": "💡 Ideas for improvement",
+    "existing_ideas": "Suggestions from users:",
+    "no_ideas_yet": "No ideas yet. Be the first to add!",
+    "add_your_idea": "Leave your idea:",
+    "your_suggestion": "Your suggestion",
+    "placeholder_suggestion": "Write what can be improved...",
+    "add_idea_button": "Add idea",
+    "idea_added_success": "Thank you! Your idea has been added.",
+    "idea_add_error": "Could not save the idea.",
+    "write_idea_warning": "Please write text before adding."
 }
