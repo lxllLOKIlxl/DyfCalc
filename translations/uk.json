@@ -47,6 +47,6 @@
     "derivative_result": "Похідна",
     "calculation_prompt": "Програма для інтегрування і диференціювання функцій",
     "greeting_dyfcalc": "Вітаємо DyfCalc",
-    "calculation_prompt_dyfcalc": "Програма для інтегрування і диференціювання функцій"
-
+    "calculation_prompt_dyfcalc": "Програма для інтегрування і диференціювання функцій",
+    "author_shablinsky": "Шаблінський С.І."
 }
