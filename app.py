@@ -306,12 +306,12 @@ with st.sidebar:
 
     # Кнопка для додавання нової ідеї
     if st.button(translations["add_idea_button"]):
-        if st.session_state.suggestion_input.strip():  # Перевірка введеного тексту
+        if user_suggestion.strip():  # Перевірка введеного тексту
             try:
-                save_suggestion(st.session_state.suggestion_input)  # Збереження нової пропозиції
+                save_suggestion(user_suggestion)  # Збереження нової пропозиції
                 st.success(translations["idea_added_success"])
 
-                # Примусове оновлення списку ідей
+                # Оновлення списку пропозицій
                 suggestions = get_suggestions()
                 st.subheader(translations["existing_ideas"])
                 if suggestions:
@@ -320,9 +320,8 @@ with st.sidebar:
                 else:
                     st.markdown(translations["no_ideas_yet"])
                 
-                # **Рішення проблеми:** Використання `st.experimental_rerun` для очищення та оновлення
-                st.session_state.suggestion_input = ""
-                st.experimental_rerun()  # Перезапуск інтерфейсу
+                # **Очищення поля через перезапуск сторінки**
+                st.experimental_set_query_params()  # Перезапуск сторінки для очищення
             except Exception as e:
                 st.error(f"{translations['idea_add_error']}: {e}")
         else:
