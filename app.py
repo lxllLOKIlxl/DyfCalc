@@ -247,13 +247,14 @@ with st.sidebar:
     else:
         st.markdown(f"<p style='color: gray;'>{translations['no_results']}</p>", unsafe_allow_html=True)
     st.markdown("---")
+
 with st.sidebar:
     # Нижня частина (автор)
     st.markdown(
         f"""
         <div style="text-align: center; color: gray; margin-top: 20px; padding: 10px; border-top: 1px solid #ddd;">
-            <p style="font-size: 14px;">{translations.get('project_by', 'Проєкт створено')}:</p>
-            <strong style="font-size: 16px; color: black;">{translations.get('author_shablinsky', 'Шаблінський С.І.')}</strong>
+            <p style="font-size: 14px; color: gray;">{translations.get('project_by', 'Проєкт створено')}:</p>
+            <strong style="font-size: 16px; color: white;">{translations.get('author_shablinsky', 'Шаблінський С.І.')}</strong>
             <br>
             <img src="https://img.icons8.com/color/96/null/code.png" alt="Code Icon" width="50">
         </div>
