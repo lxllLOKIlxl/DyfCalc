@@ -322,25 +322,45 @@ if st.button(translations["calculate_button"]):
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    
     body {
-        background: linear-gradient(to bottom, #f0f2f6, #e6ecf3);
+        background: linear-gradient(45deg, #6a11cb, #2575fc);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+        font-family: 'Poppins', sans-serif;
+        color: #333;
     }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
     .stButton>button {
         background-color: #007BFF;
         color: white;
         border: none;
-        padding: 6px 12px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 4px 2px;
-        border-radius: 8px;
-        transition-duration: 0.4s;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: 0.3s;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     }
     .stButton>button:hover {
         background-color: #0056b3;
-        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3);
+    }
+    .stButton>button:active {
+        transform: scale(0.95);
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    h1, h2, h3 {
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        color: #0056b3;
     }
     </style>
     """,
