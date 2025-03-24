@@ -141,14 +141,14 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="border: 2px solid #4CAF50; border-radius: 10px; padding: 10px; background-color: rgba(76, 175, 80, 0.1);">
-            <h4 style="color: #4CAF50; text-align: center;">
+            <h4 style="color: #4CAF50; text-align: center; font-weight: bold;">
                 {translations['online_users']}
             </h4>
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
-                <strong style="font-size: 18px; color: #333;">
+                <span style="font-size: 20px; color: black; font-weight: bold;">
                     {st.session_state.get('user_count', 1)} {translations['online_count']}
-                </strong>
+                </span>
             </div>
         </div>
         """,
@@ -160,7 +160,9 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="border: 2px solid #2196F3; border-radius: 10px; padding: 10px; background-color: rgba(33, 150, 243, 0.1);">
-            <h4 style="color: #2196F3; text-align: center;">{translations["online_chat"]}</h4>
+            <h4 style="color: #2196F3; text-align: center; font-weight: bold;">
+                {translations["online_chat"]}
+            </h4>
         </div>
         """,
         unsafe_allow_html=True
@@ -173,12 +175,12 @@ with st.sidebar:
         else:
             st.warning(translations["message_warning"])
 
-    st.markdown(f"<h6 style='color: #333;'>{translations['welcome_chat']}</h6>", unsafe_allow_html=True)
+    st.markdown(f"<h6 style='color: black; font-weight: bold;'>{translations['welcome_chat']}</h6>", unsafe_allow_html=True)
     chat_messages = get_messages()
     if chat_messages:
         for user, text in chat_messages:
             st.markdown(
-                f"<div style='margin-bottom: 8px;'><strong>{user}:</strong> {text}</div>",
+                f"<div style='margin-bottom: 8px; font-size: 16px; color: black;'><strong>{user}:</strong> {text}</div>",
                 unsafe_allow_html=True
             )
     else:
@@ -189,7 +191,9 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="border: 2px solid #FF9800; border-radius: 10px; padding: 10px; background-color: rgba(255, 152, 0, 0.1);">
-            <h4 style="color: #FF9800; text-align: center;">{translations["settings_title"]}</h4>
+            <h4 style="color: #FF9800; text-align: center; font-weight: bold;">
+                {translations["settings_title"]}
+            </h4>
         </div>
         """,
         unsafe_allow_html=True
@@ -201,7 +205,9 @@ with st.sidebar:
     st.markdown(
         f"""
         <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
-            <h4 style="color: #673AB7; text-align: center;">{translations["theme_prompt"]}</h4>
+            <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
+                {translations["theme_prompt"]}
+            </h4>
         </div>
         """,
         unsafe_allow_html=True
@@ -214,7 +220,7 @@ with st.sidebar:
         f"""
         <div style="text-align: center; color: gray; margin-top: 20px; padding: 10px; border-top: 1px solid #ddd;">
         {translations['project_by']}<br>
-        <strong>Шаблінський С.І.</strong><br>
+        <strong style="font-size: 16px;">Шаблінський С.І.</strong><br>
         <img src="https://img.icons8.com/color/96/null/code.png" alt="Code Icon" width="50">
         </div>
         """,
