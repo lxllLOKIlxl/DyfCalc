@@ -87,6 +87,11 @@ async def calculate(req: CalculationRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing data: {str(e)}")
 
+# Додавання кореневого маршруту
+@api_app.get("/")
+async def root():
+    return {"message": "Welcome to DyfCalc API! Go to /docs for more details."}
+
 # Функція для надсилання повідомлень
 def send_message(user, text):
     try:
