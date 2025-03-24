@@ -8,3 +8,4 @@ websockets
 fastapi
 uvicorn
 pydantic
+python-dotenv
