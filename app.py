@@ -280,7 +280,7 @@ with st.sidebar:
 
 with st.sidebar:
     st.header(translations["ideas_header"])
-
+    
     # Ініціалізація session_state для введення пропозиції
     if "suggestion_input" not in st.session_state:
         st.session_state["suggestion_input"] = ""  # Початкове значення
@@ -311,7 +311,7 @@ with st.sidebar:
                 save_suggestion(st.session_state["suggestion_input"])  # Збереження нової пропозиції
                 st.success(translations["idea_added_success"])
 
-                # Примусове очищення поля через session_state
+                # Очищення поля після успішного збереження
                 st.session_state["suggestion_input"] = ""  # Очищення тексту
             except Exception as e:
                 st.error(f"{translations['idea_add_error']}: {e}")
