@@ -5,6 +5,8 @@ import sympy as sp
 import firebase_admin
 from firebase_admin import credentials, db
 import json
+import threading  # Для роботи з потоками
+import time
 
 # Функція для завантаження перекладів
 def load_translations(lang):
@@ -42,7 +44,8 @@ def send_message(user, text):
         ref = db.reference('messages')
         new_message = {
             "user": user,
-            "text": text
+            "text": text,
+            "timestamp": int(time.time())  # Додаємо часову мітку для очищення
         }
         ref.push(new_message)
         st.success(translations["update_successful"])
@@ -61,14 +64,75 @@ def get_messages():
         st.error(translations["error_generic"])
         return []
 
+# Функція для автоматичного очищення чату
+def auto_clear_chat():
+    while True:
+        try:
+            current_time = int(time.time())
+            cutoff_time = current_time - 50  # Повідомлення старше 50 секунд будуть видалені
+            ref = db.reference('messages')
+
+            # Видалення повідомлень старше 50 секунд
+            old_messages = ref.order_by_child('timestamp').end_at(cutoff_time).get()
+            if old_messages:
+                for key in old_messages:
+                    ref.child(key).delete()
+
+            time.sleep(50)  # Зачекати 50 секунд до наступного очищення
+        except Exception as e:
+            st.error(f"Помилка очищення чату: {e}")
+            break
+
+# Запуск автоматичного очищення чату
+if not st.session_state.get("auto_clear_initialized", False):
+    threading.Thread(target=auto_clear_chat, daemon=True).start()
+    st.session_state["auto_clear_initialized"] = True
+
 # Вибір мови
 with st.sidebar:
-    lang = st.radio("🌍 Вибір мови / Language:", ["uk", "en"], index=0, horizontal=True)
+    st.markdown(
+        """
+        <style>
+            .language-container {
+                padding: 10px 0;
+                font-family: 'Arial', sans-serif;
+                text-align: center;
+                font-weight: bold;
+                border-bottom: 2px solid #ccc; /* Нижня рисочка */
+            }
+            .stRadio > div {
+                display: flex;
+                justify-content: center;
+            }
+        </style>
+        <div class="language-container">
+            🌍 Вибір мови / Language:
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    lang = st.radio(
+        " ",
+        ["uk", "en"],
+        index=0,
+        horizontal=True
+    )
     translations = load_translations(lang)
 
-# Заголовок
-st.markdown(f"<h1 style='text-align: center; color: blue;'>{translations['greeting']} DyfCalc</h1>", unsafe_allow_html=True)
-st.markdown(f"<h3 style='text-align: center; color: gray;'>{translations['calculation_prompt']}</h3>", unsafe_allow_html=True)
+# Заголовок програми
+st.markdown(
+    f"""
+    <div style='background-color: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;'>
+        <h1 style='text-align: center; color: blue; font-family: Arial, sans-serif; font-weight: bold;'>
+            {translations.get('greeting_dyfcalc', 'Вітаємо DyfCalc')}
+        </h1>
+        <h3 style='text-align: center; color: gray; font-family: Arial, sans-serif;'>
+            {translations.get('calculation_prompt_dyfcalc', 'Введіть функцію для обчислення')}
+        </h3>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.markdown("---")
 
 # Бокова панель із параметрами та чатом
@@ -105,7 +169,7 @@ with st.sidebar:
         f"""
         <div style="text-align: center; color: gray;">
         {translations['project_by']}<br>
-        Програма ver 1.0
+        Шаблінський С.І.
         </div>
         """,
         unsafe_allow_html=True
