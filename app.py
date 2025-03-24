@@ -88,22 +88,17 @@ if not st.session_state.get("auto_clear_initialized", False):
     threading.Thread(target=auto_clear_chat, daemon=True).start()
     st.session_state["auto_clear_initialized"] = True
 
-# Вибір мови з покращеним стилем
+# Вибір мови
 with st.sidebar:
     st.markdown(
         """
         <style>
             .language-container {
-                background-color: rgba(255, 255, 255, 0.2);
-                padding: 15px;
-                border-radius: 10px;
-                text-align: center;
+                padding: 10px 0;
                 font-family: 'Arial', sans-serif;
-            }
-            .language-container h4 {
-                color: #333;
+                text-align: center;
                 font-weight: bold;
-                margin-bottom: 10px;
+                border-bottom: 2px solid #ccc; /* Нижня рисочка */
             }
             .stRadio > div {
                 display: flex;
@@ -111,7 +106,7 @@ with st.sidebar:
             }
         </style>
         <div class="language-container">
-            <h4>🌍 Вибір мови / Language:</h4>
+            🌍 Вибір мови / Language:
         </div>
         """,
         unsafe_allow_html=True
