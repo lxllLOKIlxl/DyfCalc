@@ -247,8 +247,7 @@ with st.sidebar:
     else:
         st.markdown(f"<p style='color: gray;'>{translations['no_results']}</p>", unsafe_allow_html=True)
     st.markdown("---")
-
-    with st.sidebar:
+with st.sidebar:
     # Нижня частина (автор)
     st.markdown(
         f"""
