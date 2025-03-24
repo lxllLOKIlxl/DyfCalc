@@ -137,39 +137,85 @@ st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
-    st.header(f"{translations['online_users']}")
-    st.markdown(f"![User Icon](https://img.icons8.com/emoji/48/null/bust-in-silhouette.png) **{st.session_state.get('user_count', 1)} {translations['online_count']}**")
+    # Секція "Користувачі онлайн"
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #4CAF50; border-radius: 10px; padding: 10px; background-color: rgba(76, 175, 80, 0.1);">
+            <h4 style="color: #4CAF50; text-align: center;">
+                {translations['online_users']}
+            </h4>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
+                <strong style="font-size: 18px; color: #333;">
+                    {st.session_state.get('user_count', 1)} {translations['online_count']}
+                </strong>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     st.markdown("---")
 
-    st.header(translations["online_chat"])
-    user = st.text_input(translations["name_prompt"], key="chat_user_name")
-    message = st.text_input(translations["message_prompt"], key="chat_user_message")
+    # Секція чату
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #2196F3; border-radius: 10px; padding: 10px; background-color: rgba(33, 150, 243, 0.1);">
+            <h4 style="color: #2196F3; text-align: center;">{translations["online_chat"]}</h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    user = st.text_input(translations["name_prompt"], key="chat_user_name", placeholder="Ваше ім'я")
+    message = st.text_input(translations["message_prompt"], key="chat_user_message", placeholder="Введіть повідомлення")
     if st.button(translations["send_button_chat"], key="chat_send_button"):
         if user.strip() and message.strip():
             send_message(user, message)
         else:
             st.warning(translations["message_warning"])
 
-    st.write(f"### {translations['welcome_chat']}")
+    st.markdown(f"<h6 style='color: #333;'>{translations['welcome_chat']}</h6>", unsafe_allow_html=True)
     chat_messages = get_messages()
     if chat_messages:
         for user, text in chat_messages:
-            st.write(f"**{user}:** {text}")
+            st.markdown(
+                f"<div style='margin-bottom: 8px;'><strong>{user}:</strong> {text}</div>",
+                unsafe_allow_html=True
+            )
     else:
-        st.write(translations["no_results"])
+        st.markdown(f"<p style='color: gray;'>{translations['no_results']}</p>", unsafe_allow_html=True)
     st.markdown("---")
 
-    st.header(translations["settings_title"])
-    operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]])
-    st.markdown("---")
-    st.header(translations["theme_prompt"])
-    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]])
-    st.markdown("---")
+    # Секція налаштувань
     st.markdown(
         f"""
-        <div style="text-align: center; color: gray;">
+        <div style="border: 2px solid #FF9800; border-radius: 10px; padding: 10px; background-color: rgba(255, 152, 0, 0.1);">
+            <h4 style="color: #FF9800; text-align: center;">{translations["settings_title"]}</h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]], horizontal=True)
+    st.markdown("---")
+
+    # Теми
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
+            <h4 style="color: #673AB7; text-align: center;">{translations["theme_prompt"]}</h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
+    st.markdown("---")
+
+    # Нижня частина (автор)
+    st.markdown(
+        f"""
+        <div style="text-align: center; color: gray; margin-top: 20px; padding: 10px; border-top: 1px solid #ddd;">
         {translations['project_by']}<br>
-        Шаблінський С.І.
+        <strong>Шаблінський С.І.</strong><br>
+        <img src="https://img.icons8.com/color/96/null/code.png" alt="Code Icon" width="50">
         </div>
         """,
         unsafe_allow_html=True
