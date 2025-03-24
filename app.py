@@ -137,6 +137,34 @@ st.markdown("---")
 
 # Бокова панель із параметрами та чатом
 with st.sidebar:
+    # Секція налаштувань (тепер зверху)
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #FF9800; border-radius: 10px; padding: 10px; background-color: rgba(255, 152, 0, 0.1);">
+            <h4 style="color: #FF9800; text-align: center; font-weight: bold;">
+                {translations["settings_title"]}
+            </h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]], horizontal=True)
+    st.markdown("---")
+
+    # Теми
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
+            <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
+                {translations["theme_prompt"]}
+            </h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
+    st.markdown("---")
+
     # Секція "Користувачі онлайн"
     st.markdown(
         f"""
@@ -146,7 +174,7 @@ with st.sidebar:
             </h4>
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
-                <span style="font-size: 20px; color: black; font-weight: bold;">
+                <span style="font-size: 18px; color: #333; font-weight: bold;">
                     {st.session_state.get('user_count', 1)} {translations['online_count']}
                 </span>
             </div>
@@ -156,7 +184,7 @@ with st.sidebar:
     )
     st.markdown("---")
 
-    # Секція чату
+    # Секція чату (тепер унизу)
     st.markdown(
         f"""
         <div style="border: 2px solid #2196F3; border-radius: 10px; padding: 10px; background-color: rgba(33, 150, 243, 0.1);">
@@ -185,34 +213,6 @@ with st.sidebar:
             )
     else:
         st.markdown(f"<p style='color: gray;'>{translations['no_results']}</p>", unsafe_allow_html=True)
-    st.markdown("---")
-
-    # Секція налаштувань
-    st.markdown(
-        f"""
-        <div style="border: 2px solid #FF9800; border-radius: 10px; padding: 10px; background-color: rgba(255, 152, 0, 0.1);">
-            <h4 style="color: #FF9800; text-align: center; font-weight: bold;">
-                {translations["settings_title"]}
-            </h4>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]], horizontal=True)
-    st.markdown("---")
-
-    # Теми
-    st.markdown(
-        f"""
-        <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
-            <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
-                {translations["theme_prompt"]}
-            </h4>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
     st.markdown("---")
 
     # Нижня частина (автор)
