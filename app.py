@@ -341,30 +341,32 @@ with st.sidebar:
         """,
         unsafe_allow_html=True
     )
+
 # Додаткові стилі для текстового поля
 st.markdown("""
 <style>
 textarea {
-    background-color: #f0f8ff; /* Світло-блакитний фон для чіткішої видимості */
-    border: 2px solid #007BFF; /* Чітка рамка синього кольору */
-    border-radius: 8px; /* Згладжені кути рамки */
+    background-color: #f0f8ff; /* Світло-блакитний фон */
+    border: 2px solid #007BFF; /* Чітка рамка */
+    border-radius: 8px; /* Згладжені кути */
     padding: 10px; /* Внутрішній відступ */
-    font-size: 16px; /* Збільшений шрифт для зручності читання */
-    color: #333; /* Темний текст для контрасту */
-    transition: border-color 0.3s ease; /* Анімація зміни кольору рамки */
+    font-size: 16px; /* Збільшений шрифт */
+    color: #333; /* Темний текст */
+    transition: border-color 0.3s ease; /* Анімація при фокусі */
 }
 textarea:focus {
-    border-color: #0056b3; /* Колір рамки під час фокусу */
-    box-shadow: 0 0 5px #0056b3; /* Легка тінь при фокусуванні */
+    border-color: #0056b3; /* Підсвітка рамки при фокусуванні */
+    box-shadow: 0 0 5px #0056b3; /* Тінь при фокусі */
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Основна функціональність калькулятора
-st.markdown(
-    f"<h5>{translations['calculation_prompt']}</h5>",
-    unsafe_allow_html=True
+# Елемент введення тексту для функції
+user_function = st.text_input(
+    translations["input_example"],
+    placeholder=translations["input_example"]
 )
+
 user_function = st.text_input(translations["input_example"], placeholder=translations["input_example"])
 
 # Побудова графіка функції з перевіркою
