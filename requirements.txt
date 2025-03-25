@@ -9,9 +9,3 @@ fastapi
 uvicorn
 pydantic
 python-dotenv
-buildozer.spec
-requirements = python3,
-kivy,
-matplotlib, 
-numpy,
-sympy
