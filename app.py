@@ -195,40 +195,19 @@ with st.sidebar:
     st.markdown("---")
 
 # Теми
-  st.markdown(
-    f"""
-    <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
-        <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
-            {translations["theme_prompt"]}
-        </h4>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
-st.markdown("---")
-
-# Логіка зміни теми
-if theme == translations["theme_light"]:
-    st.markdown("""
-    <style>
-    body {
-        background-color: #ffffff; /* Світлий фон */
-        color: #333; /* Темний текст */
-    }
-    </style>
-    """, unsafe_allow_html=True)
-elif theme == translations["theme_dark"]:
-    st.markdown("""
-    <style>
-    body {
-        background-color: #333333; /* Темний фон */
-        color: #ffffff; /* Світлий текст */
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
+    st.markdown(
+        f"""
+        <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
+            <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
+                {translations["theme_prompt"]}
+            </h4>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
+    st.markdown("---")
+    
 with st.sidebar:
     # Вст
 
