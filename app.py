@@ -194,8 +194,8 @@ with st.sidebar:
     operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]], horizontal=True)
     st.markdown("---")
 
-    # Теми
-st.markdown(
+# Теми
+  st.markdown(
     f"""
     <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
         <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
@@ -227,6 +227,7 @@ elif theme == translations["theme_dark"]:
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 with st.sidebar:
     # Вст
