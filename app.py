@@ -195,22 +195,53 @@ with st.sidebar:
     st.markdown("---")
 
 # Теми
+st.markdown(
+    f"""
+    <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
+        <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
+            {translations["theme_prompt"]}
+        </h4>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+theme = st.radio(
+    translations["theme_prompt"],
+    [translations["theme_light"], translations["theme_dark"]],
+    horizontal=True
+)
+
+st.markdown("---")
+
+# Зміна стилів контейнера залежно від вибраної теми
+if theme == translations["theme_light"]:
     st.markdown(
-        f"""
-        <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
-            <h4 style="color: #673AB7; text-align: center; font-weight: bold;">
-                {translations["theme_prompt"]}
-            </h4>
-        </div>
+        """
+        <style>
+        div[data-testid="stAppViewContainer"] {
+            background-color: #FFFFFF;
+            color: #333333;
+        }
+        </style>
         """,
         unsafe_allow_html=True
     )
-    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
-    st.markdown("---")
-    
+elif theme == translations["theme_dark"]:
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stAppViewContainer"] {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 with st.sidebar:
     # Вст
-
     # Секція "Користувачі онлайн"
     st.markdown(
         f"""
