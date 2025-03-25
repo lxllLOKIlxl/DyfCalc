@@ -341,6 +341,24 @@ with st.sidebar:
         """,
         unsafe_allow_html=True
     )
+# Додаткові стилі для текстового поля
+st.markdown("""
+<style>
+textarea {
+    background-color: #f0f8ff; /* Світло-блакитний фон для чіткішої видимості */
+    border: 2px solid #007BFF; /* Чітка рамка синього кольору */
+    border-radius: 8px; /* Згладжені кути рамки */
+    padding: 10px; /* Внутрішній відступ */
+    font-size: 16px; /* Збільшений шрифт для зручності читання */
+    color: #333; /* Темний текст для контрасту */
+    transition: border-color 0.3s ease; /* Анімація зміни кольору рамки */
+}
+textarea:focus {
+    border-color: #0056b3; /* Колір рамки під час фокусу */
+    box-shadow: 0 0 5px #0056b3; /* Легка тінь при фокусуванні */
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Основна функціональність калькулятора
 st.markdown(
