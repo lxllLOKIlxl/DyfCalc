@@ -194,8 +194,7 @@ with st.sidebar:
     operation = st.radio(translations["operation_prompt"], [translations["integration"], translations["differentiation"]], horizontal=True)
     st.markdown("---")
 
-# Теми (додаємо до бічної панелі)
-with st.sidebar:
+# Теми
     st.markdown(
         f"""
         <div style="border: 2px solid #673AB7; border-radius: 10px; padding: 10px; background-color: rgba(103, 58, 183, 0.1);">
@@ -206,82 +205,7 @@ with st.sidebar:
         """,
         unsafe_allow_html=True
     )
-    theme = st.radio(
-        translations["theme_prompt"],
-        [translations["theme_light"], translations["theme_dark"]],
-        horizontal=True
-    )
-
-# Логіка зміни теми
-if theme == translations["theme_light"]:
-    st.markdown(
-        """
-        <style>
-        div[data-testid="stAppViewContainer"] {
-            background-color: #d3d3d3; /* Світло-сірий фон */
-            color: #333333; /* Темний текст */
-        }
-        div[data-testid="stSidebar"] {
-            background-color: #d3d3d3; /* Світло-сірий фон для бічної панелі */
-            color: #333333; /* Темний текст для бічної панелі */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-elif theme == translations["theme_dark"]:
-    st.markdown(
-        """
-        <style>
-        div[data-testid="stAppViewContainer"] {
-            background-color: #2c2c2c; /* Чорний металік */
-            color: #ffffff; /* Світлий текст */
-        }
-        div[data-testid="stSidebar"] {
-            background-color: #2c2c2c; /* Чорний металік для бічної панелі */
-            color: #ffffff; /* Світлий текст для бічної панелі */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    
-with st.sidebar:
-    # Вст
-    # Секція "Користувачі онлайн"
-    st.markdown(
-        f"""
-        <div style="
-            border: 1px solid #D3D3D3; 
-            border-radius: 10px; 
-            padding: 10px; 
-            background: linear-gradient(135deg, rgba(240, 240, 240, 0.9), rgba(255, 255, 255, 0.6));">
-            <h5 style="
-                color: #333; 
-                text-align: center; 
-                font-weight: bold; 
-                font-family: Arial, sans-serif; 
-                font-size: 16px;">
-                {translations['online_users']}
-            </h5>
-            <div style="
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                gap: 10px;">
-                <img src="https://img.icons8.com/emoji/48/null/bust-in-silhouette.png" alt="User Icon" width="30">
-                <span style="
-                    font-size: 18px; 
-                    color: #555; 
-                    font-weight: 600; 
-                    font-family: 'Verdana', sans-serif;">
-                    {st.session_state.get('user_count', 1)} {translations['online_count']}
-                </span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    theme = st.radio(translations["theme_prompt"], [translations["theme_light"], translations["theme_dark"]], horizontal=True)
     st.markdown("---")
 
     # Секція чату 
