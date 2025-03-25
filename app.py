@@ -143,7 +143,7 @@ with st.sidebar:
     )
     lang = st.radio(
         " ",
-        ["uk", "en"],
+        ["Ua", "En"],
         index=0,
         horizontal=True
     )
