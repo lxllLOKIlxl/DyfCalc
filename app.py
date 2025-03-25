@@ -342,13 +342,28 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
+# Додатковий стиль для текстового поля
+st.markdown("""
+<style>
+.stTextInput {
+    border: 2px solid #333; /* Чітка темна рамка */
+    border-radius: 5px; /* Згладжені кути */
+    padding: 5px; /* Внутрішній відступ */
+    background-color: #ffffff; /* Білий фон для контрасту */
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Основна функціональність калькулятора
 st.markdown(
     f"<h5>{translations['calculation_prompt']}</h5>",
     unsafe_allow_html=True
 )
 
-user_function = st.text_input(translations["input_example"], placeholder=translations["input_example"])
+user_function = st.text_input(
+    translations["input_example"],
+    placeholder=translations["input_example"]
+)
 
 # Побудова графіка функції з перевіркою
 if user_function:
