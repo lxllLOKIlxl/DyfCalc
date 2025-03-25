@@ -218,8 +218,12 @@ if theme == translations["theme_light"]:
         """
         <style>
         div[data-testid="stAppViewContainer"] {
-            background-color: #FFFFFF;
-            color: #333333;
+            background-color: #d3d3d3; /* Світло-сірий фон */
+            color: #333333; /* Темний текст */
+        }
+        div[data-testid="stSidebar"] {
+            background-color: #d3d3d3; /* Світло-сірий фон для бічної панелі */
+            color: #333333; /* Темний текст для бічної панелі */
         }
         </style>
         """,
@@ -230,14 +234,18 @@ elif theme == translations["theme_dark"]:
         """
         <style>
         div[data-testid="stAppViewContainer"] {
-            background-color: #333333;
-            color: #FFFFFF;
+            background-color: #2c2c2c; /* Чорний металік */
+            color: #ffffff; /* Світлий текст */
+        }
+        div[data-testid="stSidebar"] {
+            background-color: #2c2c2c; /* Чорний металік для бічної панелі */
+            color: #ffffff; /* Світлий текст для бічної панелі */
         }
         </style>
         """,
         unsafe_allow_html=True
     )
-
+    
 with st.sidebar:
     # Вст
     # Секція "Користувачі онлайн"
